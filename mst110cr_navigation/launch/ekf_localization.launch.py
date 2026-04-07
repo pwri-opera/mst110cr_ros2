@@ -44,15 +44,15 @@ def generate_launch_description():
                 ]
             ),
 
-            Node(
-                package = 'd37pxi_navigation',
-                executable = 'message_converter_odom',
-                name = "message_converter_odom",
-                output = "screen",
-                parameters=[{'input_topic': "odom_pose",
-                            'output_topic': 'fixed_odom_pose',
-                            'use_sim_time': use_sim_time}],
-            ),
+            # Node(
+            #     package = 'd37pxi_navigation',
+            #     executable = 'message_converter_odom',
+            #     name = "message_converter_odom",
+            #     output = "screen",
+            #     parameters=[{'input_topic': "odom_pose",
+            #                 'output_topic': 'fixed_odom_pose',
+            #                 'use_sim_time': use_sim_time}],
+            # ),
 
             Node(
                 package = 'mst110cr_navigation',
