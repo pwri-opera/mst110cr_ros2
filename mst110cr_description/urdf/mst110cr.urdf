@@ -30,7 +30,7 @@
   </link>
   <!-- }}} Track ends here -->
   <!-- Body {{{ -->
-  <joint name="swing_joint" type="continuous">
+  <joint name="rotate_joint" type="continuous">
     <origin xyz="0 0 1"/>
     <axis xyz="0 0 1"/>
     <parent link="mst110cr_2/track_link"/>
@@ -56,6 +56,174 @@
     </inertial>
   </link>
   <!-- }}} Body ends here -->
+  <!-- os_stand frame {{{ -->
+  <joint name="os_stand_joint" type="fixed">
+    <parent link="mst110cr_2/body_link"/>
+    <child link="mst110cr_2/os_stand"/>
+    <origin rpy="0 0 0" xyz="2.640 0.660 2.260"/>
+  </joint>
+  <link name="mst110cr_2/os_stand">
+    <visual>
+      <origin xyz="0 0 0"/>
+      <geometry>
+        <box size="0.01 0.01 0.01"/>
+      </geometry>
+      <material name="gray">
+        <color rgba="0.5 0.5 0.5 1.0"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0"/>
+      <geometry>
+        <box size="0.01 0.01 0.01"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <mass value="1e-6"/>
+      <inertia ixx="1e-6" ixy="0" ixz="0" iyy="1e-6" iyz="0" izz="1e-6"/>
+    </inertial>
+  </link>
+  <!-- os_sensor frame {{{ -->
+  <joint name="os_sensor_joint" type="fixed">
+    <parent link="mst110cr_2/os_stand"/>
+    <child link="mst110cr_2/os_sensor"/>
+    <origin rpy="0 0 0" xyz="0.040 0.000 0.085"/>
+  </joint>
+  <link name="mst110cr_2/os_sensor">
+    <visual>
+      <origin xyz="0 0 0"/>
+      <geometry>
+        <box size="0.01 0.01 0.01"/>
+      </geometry>
+      <material name="gray">
+        <color rgba="0.5 0.5 0.5 1.0"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0"/>
+      <geometry>
+        <box size="0.01 0.01 0.01"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <mass value="1e-6"/>
+      <inertia ixx="1e-6" ixy="0" ixz="0" iyy="1e-6" iyz="0" izz="1e-6"/>
+    </inertial>
+  </link>
+  <!-- livox_fr frame {{{ -->
+  <joint name="livox_fr_joint" type="fixed">
+    <parent link="mst110cr_2/body_link"/>
+    <child link="mst110cr_2/livox_fr"/>
+    <origin rpy="3.141592653589793 0 0" xyz="2.98 -1.4 0.2"/>
+  </joint>
+  <link name="mst110cr_2/livox_fr">
+    <visual>
+      <origin xyz="0 0 0"/>
+      <geometry>
+        <box size="0.01 0.01 0.01"/>
+      </geometry>
+      <material name="gray">
+        <color rgba="0.5 0.5 0.5 1.0"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0"/>
+      <geometry>
+        <box size="0.01 0.01 0.01"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <mass value="1e-6"/>
+      <inertia ixx="1e-6" ixy="0" ixz="0" iyy="1e-6" iyz="0" izz="1e-6"/>
+    </inertial>
+  </link>
+  <!-- livox_fl frame {{{ -->
+  <joint name="livox_fl_joint" type="fixed">
+    <parent link="mst110cr_2/body_link"/>
+    <child link="mst110cr_2/livox_fl"/>
+    <origin rpy="3.141592653589793 0 0" xyz="2.98 1.4 0.2"/>
+  </joint>
+  <link name="mst110cr_2/livox_fl">
+    <visual>
+      <origin xyz="0 0 0"/>
+      <geometry>
+        <box size="0.01 0.01 0.01"/>
+      </geometry>
+      <material name="gray">
+        <color rgba="0.5 0.5 0.5 1.0"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0"/>
+      <geometry>
+        <box size="0.01 0.01 0.01"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <mass value="1e-6"/>
+      <inertia ixx="1e-6" ixy="0" ixz="0" iyy="1e-6" iyz="0" izz="1e-6"/>
+    </inertial>
+  </link>
+  <!-- livox_rr frame {{{ -->
+  <joint name="livox_rr_joint" type="fixed">
+    <parent link="mst110cr_2/body_link"/>
+    <child link="mst110cr_2/livox_rr"/>
+    <origin rpy="3.141592653589793 0 3.141592653589793" xyz="-2.4 -0.555 0.2"/>
+  </joint>
+  <link name="mst110cr_2/livox_rr">
+    <visual>
+      <origin xyz="0 0 0"/>
+      <geometry>
+        <box size="0.01 0.01 0.01"/>
+      </geometry>
+      <material name="gray">
+        <color rgba="0.5 0.5 0.5 1.0"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0"/>
+      <geometry>
+        <box size="0.01 0.01 0.01"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <mass value="1e-6"/>
+      <inertia ixx="1e-6" ixy="0" ixz="0" iyy="1e-6" iyz="0" izz="1e-6"/>
+    </inertial>
+  </link>
+  <!-- livox_rl frame {{{ -->
+  <joint name="livox_rl_joint" type="fixed">
+    <parent link="mst110cr_2/body_link"/>
+    <child link="mst110cr_2/livox_rl"/>
+    <origin rpy="3.141592653589793 0 3.141592653589793" xyz="-2.4 0.555 0.2"/>
+  </joint>
+  <link name="mst110cr_2/livox_rl">
+    <visual>
+      <origin xyz="0 0 0"/>
+      <geometry>
+        <box size="0.01 0.01 0.01"/>
+      </geometry>
+      <material name="gray">
+        <color rgba="0.5 0.5 0.5 1.0"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0"/>
+      <geometry>
+        <box size="0.01 0.01 0.01"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <mass value="1e-6"/>
+      <inertia ixx="1e-6" ixy="0" ixz="0" iyy="1e-6" iyz="0" izz="1e-6"/>
+    </inertial>
+  </link>
   <!-- Vessel {{{ -->
   <joint name="vessel_pin_joint" type="revolute">
     <origin xyz="-2.389 0 0.562"/>
@@ -141,4 +309,11 @@
     </inertial>
   </link>
   <!-- }}} Vessel Rod ends here -->
+  <joint name="gnss_joint" type="fixed">
+    <origin xyz="1.42 0.60 2.20"/>
+    <axis xyz="0 0 1"/>
+    <parent link="mst110cr_2/body_link"/>
+    <child link="mst110cr_2/gnss_link"/>
+  </joint>
+  <link name="mst110cr_2/gnss_link"/>
 </robot>
