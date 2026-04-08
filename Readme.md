@@ -2,9 +2,8 @@
 
 ## Usage
 
-### Simulator (OperaSim PhysX)
+### Simulator (OperaSim PhysX/AGX)
 
 ```bash
 ros2 launch mst110cr_unity mst110cr_standby_ekf.launch.py
 ```
-
