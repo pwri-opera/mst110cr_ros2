@@ -32,7 +32,7 @@ def generate_launch_description():
     use_navigation_xy_goal_tolerance = LaunchConfiguration('navigation_xy_goal_tolerance')
     use_navigation_yaw_goal_tolerance = LaunchConfiguration('navigation_yaw_goal_tolerance')
 
-    lifecycle_nodes_localization = ['map_server']
+    lifecycle_nodes_localization = ['map_server', 'vizmap_server']
 
     lifecycle_nodes_navigation = [
         'controller_server',
@@ -90,18 +90,34 @@ def generate_launch_description():
                 ),
 
                 Node(
-                    condition=IfCondition('true'),
-                    name='nav2_container',
-                    package='rclcpp_components',
-                    executable='component_container_isolated',
-                    parameters=[
-                        configured_params,
-                        {
-                            'autostart': use_autostart,
-                        }
-                    ],
-                    output='screen'
+                    condition=IfCondition(use_sim_time),
+                    package='nav2_map_server',
+                    executable='map_server',
+                    name='vizmap_server',
+                    output='screen',
+                    respawn=use_respawn,
+                    respawn_delay=2.0,
+                    parameters=[{
+                        'yaml_filename': '/home/opera/humble_ws/src/mst110cr_ros2/mst110cr_unity/map/operasim_physx_vizmap.yaml',
+                        'topic_name': 'vizmap',
+                        'frame_id': 'map',
+                        'introspection_mode': 'disabled'
+                    }],
                 ),
+
+                # Node(
+                #     condition=IfCondition('true'),
+                #     name='nav2_container',
+                #     package='rclcpp_components',
+                #     executable='component_container_isolated',
+                #     parameters=[
+                #         configured_params,
+                #         {
+                #             'autostart': use_autostart,
+                #         }
+                #     ],
+                #     output='screen'
+                # ),
 
                 #########################
                 # Localization packages #

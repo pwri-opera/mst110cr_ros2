@@ -73,12 +73,12 @@
 
 	<!-- os_stand frame {{{ -->
 	<joint name="os_stand_joint" type="fixed">
-		<parent link="mst110cr_2/body_link"/>
-		<child link="mst110cr_2/os_stand"/>
+		<parent link="${prefix}/body_link"/>
+		<child link="${prefix}/os_stand"/>
 		<origin xyz="2.640 0.660 2.260" rpy="0 0 0"/>
 	</joint>	
 	
-	<link name="mst110cr_2/os_stand">
+	<link name="${prefix}/os_stand">
 		<visual>
 		<origin xyz="0 0 0"/>
 		<geometry>
@@ -107,12 +107,12 @@
 
 	<!-- os_sensor frame {{{ -->
 	<joint name="os_sensor_joint" type="fixed">
-		<parent link="mst110cr_2/os_stand"/>
-		<child link="mst110cr_2/os_sensor"/>
+		<parent link="${prefix}/os_stand"/>
+		<child link="${prefix}/os_sensor"/>
 		<origin xyz="0.040 0.000 0.085" rpy="0 0 0"/>
 	</joint>	
 	
-	<link name="mst110cr_2/os_sensor">
+	<link name="${prefix}/os_sensor">
 		<visual>
 		<origin xyz="0 0 0"/>
 		<geometry>
@@ -141,12 +141,12 @@
 
 	<!-- livox_fr frame {{{ -->
 	<joint name="livox_fr_joint" type="fixed">
-		<parent link="mst110cr_2/body_link"/>
-		<child link="mst110cr_2/livox_fr"/>
+		<parent link="${prefix}/body_link"/>
+		<child link="${prefix}/livox_fr"/>
 		<origin xyz="2.98 -1.4 0.2" rpy="${radians(180)} 0 0"/>
 	</joint>	
 	
-	<link name="mst110cr_2/livox_fr">
+	<link name="${prefix}/livox_fr">
 		<visual>
 		<origin xyz="0 0 0"/>
 		<geometry>
@@ -175,12 +175,12 @@
 
 	<!-- livox_fl frame {{{ -->
 	<joint name="livox_fl_joint" type="fixed">
-		<parent link="mst110cr_2/body_link"/>
-		<child link="mst110cr_2/livox_fl"/>
+		<parent link="${prefix}/body_link"/>
+		<child link="${prefix}/livox_fl"/>
 		<origin xyz="2.98 1.4 0.2" rpy="${radians(180)} 0 0"/>
 	</joint>	
 	
-	<link name="mst110cr_2/livox_fl">
+	<link name="${prefix}/livox_fl">
 		<visual>
 		<origin xyz="0 0 0"/>
 		<geometry>
@@ -209,12 +209,12 @@
 
 	<!-- livox_rr frame {{{ -->
 	<joint name="livox_rr_joint" type="fixed">
-		<parent link="mst110cr_2/body_link"/>
-		<child link="mst110cr_2/livox_rr"/>
+		<parent link="${prefix}/body_link"/>
+		<child link="${prefix}/livox_rr"/>
 		<origin xyz="-2.4 -0.555 0.2" rpy="${radians(180)} 0 ${radians(180)}"/>
 	</joint>	
 	
-	<link name="mst110cr_2/livox_rr">
+	<link name="${prefix}/livox_rr">
 		<visual>
 		<origin xyz="0 0 0"/>
 		<geometry>
@@ -243,12 +243,12 @@
 
 	<!-- livox_rl frame {{{ -->
 	<joint name="livox_rl_joint" type="fixed">
-		<parent link="mst110cr_2/body_link"/>
-		<child link="mst110cr_2/livox_rl"/>
+		<parent link="${prefix}/body_link"/>
+		<child link="${prefix}/livox_rl"/>
 		<origin xyz="-2.4 0.555 0.2" rpy="${radians(180)} 0 ${radians(180)}"/>
 	</joint>	
 	
-	<link name="mst110cr_2/livox_rl">
+	<link name="${prefix}/livox_rl">
 		<visual>
 		<origin xyz="0 0 0"/>
 		<geometry>

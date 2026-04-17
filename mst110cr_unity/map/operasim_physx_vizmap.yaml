@@ -1,0 +1,11 @@
+# 590-294 = 296 pixel/grid (grid = 100m)
+# origin: from lr (590, 593), from ld (590,595)
+# size: 1181x1188
+
+image: operasim_physx_vizmap.png
+resolution: 0.33783783783
+origin: [-199.0, 201.0, -1.57]  # [-199.32432432, -201.013513509, -1.57]  # [590.0, 595.0, 0.0]
+occupied_thresh: 0.65
+free_thresh: 0.2
+mode: raw
+negate: false
