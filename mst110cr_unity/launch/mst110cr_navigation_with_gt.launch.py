@@ -28,6 +28,9 @@ def generate_launch_description():
     mst110cr_route_navigation_launch_file_path = os.path.join(
         mst110cr_navigation_dir, "launch", "mst110cr_route_navigation.launch.py"
     )
+    mst110cr_enable_route_switcher_navigation_launch_file_path = os.path.join(
+        mst110cr_navigation_dir, "launch", "mst110cr_enable_route_switcher_navigation.launch.py"
+    )
     mst110cr_standby_rviz_file_path = os.path.join(
         mst110cr_navigation_dir, "rviz2", "mst110cr_navigation_sim.rviz"
     )
@@ -163,8 +166,18 @@ def generate_launch_description():
         #         'navigation_yaw_goal_tolerance': use_navigation_yaw_goal_tolerance
         #     }.items(),
         # ),
+        # IncludeLaunchDescription(
+        #     PythonLaunchDescriptionSource(mst110cr_route_navigation_launch_file_path),
+        #     launch_arguments={
+        #         'robot_name': robot_name,
+        #         'use_namespace': 'true',
+        #         'use_sim_time': use_sim_time,
+        #         'navigation_xy_goal_tolerance': use_navigation_xy_goal_tolerance,
+        #         'navigation_yaw_goal_tolerance': use_navigation_yaw_goal_tolerance
+        #     }.items(),
+        # ),
         IncludeLaunchDescription(
-            PythonLaunchDescriptionSource(mst110cr_route_navigation_launch_file_path),
+            PythonLaunchDescriptionSource(mst110cr_enable_route_switcher_navigation_launch_file_path),
             launch_arguments={
                 'robot_name': robot_name,
                 'use_namespace': 'true',
@@ -173,7 +186,6 @@ def generate_launch_description():
                 'navigation_yaw_goal_tolerance': use_navigation_yaw_goal_tolerance
             }.items(),
         ),
-
 
         Node(
             package='pointcloud_to_laserscan', executable='pointcloud_to_laserscan_node',
