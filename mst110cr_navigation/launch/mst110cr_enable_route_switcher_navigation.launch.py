@@ -127,13 +127,13 @@ def generate_launch_description():
 
     declare_params_file_cmd = DeclareLaunchArgument(
         'params_file',
-        default_value=os.path.join(mst110cr_navigation_dir, 'params', 'mst110cr_enable_route_switcher_navigation.yaml'),
+        default_value=os.path.join(mst110cr_navigation_dir, 'params', 'mst110cr_redcone.yaml'),
         description='Full path to the ROS2 parameters file to use for all launched nodes',
     )
 
     declare_graph_file_cmd = DeclareLaunchArgument(
         'graph',
-        default_value='/home/opera/humble_ws/src/mst110cr_ros2/mst110cr_navigation/graphs/operasim_physx.geojson', description='Path to the graph file to load'
+        default_value='/home/opera/humble_ws/src/mst110cr_ros2/mst110cr_navigation/graphs/experiment_redcone2.geojson', description='Path to the graph file to load'
     )
 
     declare_autostart_cmd = DeclareLaunchArgument(
