@@ -74,6 +74,7 @@ bt_navigator:
     # Built-in plugins are added automatically
     plugin_lib_names: [
       "enable_route_switcher_bt_node",
+      "check_safety_bt_node"
       # "nav2_wait_action_bt_node",
       # "nav2_back_up_action_bt_node"
     ]

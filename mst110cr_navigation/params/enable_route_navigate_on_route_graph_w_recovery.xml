@@ -17,6 +17,13 @@
         <ControllerSelector selected_controller="{selected_controller}" default_controller="FollowPath" topic_name="controller_selector"/>
         <PlannerSelector selected_planner="{selected_planner}" default_planner="GridBased" topic_name="planner_selector"/>
         <EnableRouteSwitcher default_value="true" topic_name="enable_route_switcher" enable_route="{enable_route}" />
+
+        <!-- <RecoveryNode number_of_retries="1" name="CheckSafety">
+          <RateController hz="1.0" name="CheckSafetyRateController">
+            <CheckSafety/>
+          </RateController>
+        </RecoveryNode> -->
+        
         <RecoveryNode number_of_retries="1" name="ComputeRoute">
           <RateController hz="0.5" name="ComputeRouteRateController">
               <Fallback>
