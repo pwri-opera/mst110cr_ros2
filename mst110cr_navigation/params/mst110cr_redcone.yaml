@@ -393,9 +393,9 @@ smoother_server:
       plugin: "nav2_smoother::SimpleSmoother"
       tolerance: 1.0e-10
       max_its: 1000
-      refinement_num: 50  # 2
-      w_data: 0.02  # 0.2
-      w_smooth: 0.48  # 0.3
+      refinement_num: 2  # 2 -> 50
+      w_data: 0.2  # 0.2
+      w_smooth: 0.3  # 0.3
       # True for Hybrid A* or State Lattice to not smooth over directional changes
       enforce_path_inversion: True
       do_refinement: True
@@ -403,9 +403,9 @@ smoother_server:
       plugin: "nav2_smoother::SimpleSmoother"
       tolerance: 1.0e-10
       max_its: 1000
-      refinement_num: 150  # 5
-      w_data: 0.02  # 0.2
-      w_smooth: 0.48  # 0.3
+      refinement_num: 5  # 5
+      w_data: 0.2  # 0.2
+      w_smooth: 0.3  # 0.3
       # False for Route Server or others where smoothing out sharp corners is OK
       enforce_path_inversion: False
       do_refinement: True
