@@ -66,8 +66,8 @@ bt_navigator:
     # default_nav_through_poses_bt_xml: "/home/opera/humble_ws/src/mst110cr_ros2/mst110cr_navigation/params/enable_route_navigate_w_routing_global_planning_and_control_w_recovery.xml"
     # default_nav_to_pose_bt_xml: "/home/opera/humble_ws/src/mst110cr_ros2/mst110cr_navigation/params/enable_route_navigate_w_routing_global_planning_and_control_w_recovery.xml"
 
-    default_nav_through_poses_bt_xml: "/home/opera/humble_ws/src/mst110cr_ros2/mst110cr_navigation/params/enable_route_navigate_on_route_graph_w_recovery.xml"
-    default_nav_to_pose_bt_xml: "/home/opera/humble_ws/src/mst110cr_ros2/mst110cr_navigation/params/enable_route_navigate_on_route_graph_w_recovery.xml"
+    default_nav_through_poses_bt_xml: "//home/opera/humble_ws/src/mst110cr_ros2/mst110cr_navigation/params/enable_route_compute_and_track_route_graph.xml"
+    default_nav_to_pose_bt_xml: "/home/opera/humble_ws/src/mst110cr_ros2/mst110cr_navigation/params/enable_route_compute_and_track_route_graph.xml"
 
 
     # plugin_lib_names is used to add custom BT plugins to the executor (vector of strings).
@@ -465,7 +465,7 @@ route_server:
     boundary_radius_to_achieve_node: 15.0  # 1.0
     radius_to_achieve_node: 15.0
     smooth_corners: true
-    operations: ["AdjustSpeedLimit", "ReroutingService", "CollisionMonitor"]
+    operations: ["AdjustSpeedLimit", "ReroutingService", "CollisionMonitor", "OperaRouteVisualizer"]
     ReroutingService:
       plugin: "nav2_route::ReroutingService"
     AdjustSpeedLimit:
@@ -473,6 +473,8 @@ route_server:
     CollisionMonitor:
       plugin: "nav2_route::CollisionMonitor"
       max_collision_dist: 3.0
+    OperaRouteVisualizer:
+      plugin: "opera_nav2_route_plugins::OperaRouteVisualizer"
     edge_cost_functions: ["DistanceScorer", "CostmapScorer"]
     DistanceScorer:
       plugin: "nav2_route::DistanceScorer"
@@ -484,6 +486,9 @@ route_server:
     min_prune_dist_from_goal: 0.15
     min_prune_dist_from_start: 0.1
     prune_goal: False
+
+    graph_file_loader: "OperaGeoJsonGraphFileLoader"   # Name of default file loader
+      plugin: nav2_route::OperaGeoJsonGraphFileLoader  # file loader plugin to use
 
 velocity_smoother:
   ros__parameters:
