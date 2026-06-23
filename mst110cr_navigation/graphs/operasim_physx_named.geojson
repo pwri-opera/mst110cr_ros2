@@ -3,7 +3,7 @@
     "name": "operasim_physx_graph",
     "crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:EPSG::3857" } },
     "features": [
-    { "type": "Feature", "properties": { "id": 0 }, "geometry": { "type": "Point", "coordinates": [ 3.41, -1.15 ] } },
+    { "type": "Feature", "properties": { "id": 0}, "geometry": { "type": "Point", "coordinates": [ 3.41, -1.15 ] } },
     { "type": "Feature", "properties": { "id": 1, "name": "フィールド南西"}, "geometry": { "type": "Point", "coordinates": [ -7.91, -3.51 ] } },
     { "type": "Feature", "properties": { "id": 2, "name": "フィールド北西" }, "geometry": { "type": "Point", "coordinates": [ 67.9, 7.02 ] } },
     { "type": "Feature", "properties": { "id": 3, "name": "フィールド北東"}, "geometry": { "type": "Point", "coordinates": [ 74.5, -48.6 ] } },
@@ -28,26 +28,26 @@
     { "type": "Feature", "properties": { "id": 22 }, "geometry": { "type": "Point", "coordinates": [ 99.1, 22.6 ] } },
     { "type": "Feature", "properties": { "id": 23 }, "geometry": { "type": "Point", "coordinates": [ 84.9, 103 ] } },
     { "type": "Feature", "properties": { "id": 24 }, "geometry": { "type": "Point", "coordinates": [ 70.7, 15.7 ] } },
-    { "type": "Feature", "properties": { "id": 10000, "startid": 0, "endid": 1 }, "geometry": { "type": "LineString", "coordinates": [ [ 3.41, -1.15 ], [ -7.91, -3.51 ]] } },
-    { "type": "Feature", "properties": { "id": 10001, "startid": 1, "endid": 0 }, "geometry": { "type": "LineString", "coordinates": [ [ -7.91, -3.51 ], [ 3.41, -1.15 ]] } },
+    { "type": "Feature", "properties": { "id": 10000, "startid": 0, "endid": 1, "metadata": {"width": 4.0, "grade": -10.0, "tag": ["main"]} }, "geometry": { "type": "LineString", "coordinates": [ [ 3.41, -1.15 ], [ -7.91, -3.51 ]] } },
+    { "type": "Feature", "properties": { "id": 10001, "startid": 1, "endid": 0, "metadata": {"width": 4.0, "grade": 10.0, "tag": ["main"]}  }, "geometry": { "type": "LineString", "coordinates": [ [ -7.91, -3.51 ], [ 3.41, -1.15 ]] } },
 
-    { "type": "Feature", "properties": { "id": 10001, "startid": 0, "endid": 15 }, "geometry": { "type": "LineString", "coordinates": [ [ 3.41, -1.15 ], [ 56.5, 5.52 ]  ] } },
-    { "type": "Feature", "properties": { "id": 10001, "startid": 15, "endid": 0 }, "geometry": { "type": "LineString", "coordinates": [ [ 56.5, 5.52 ] , [ 3.41, -1.15 ] ] } },
+    { "type": "Feature", "properties": { "id": 10001, "startid": 0, "endid": 15, "metadata": {"width": 2.0, "grade": 5.0, "tag": ["main"]}  }, "geometry": { "type": "LineString", "coordinates": [ [ 3.41, -1.15 ], [ 56.5, 5.52 ]  ] } },
+    { "type": "Feature", "properties": { "id": 10001, "startid": 15, "endid": 0, "metadata": {"width": 2.0, "grade": -5.0, "tag": ["main"]}  }, "geometry": { "type": "LineString", "coordinates": [ [ 56.5, 5.52 ] , [ 3.41, -1.15 ] ] } },
 
-    { "type": "Feature", "properties": { "id": 10001, "startid": 2, "endid": 15 }, "geometry": { "type": "LineString", "coordinates": [ [ 0.112, 4.28 ], [ 56.5, 5.52 ]  ] } },
-    { "type": "Feature", "properties": { "id": 10001, "startid": 15, "endid": 2 }, "geometry": { "type": "LineString", "coordinates": [ [ 56.5, 5.52 ] , [ 0.112, 4.28 ] ] } },
+    { "type": "Feature", "properties": { "id": 10001, "startid": 2, "endid": 15, "metadata": {"width": 6.0, "grade": -15.0, "tag": ["main"]}  }, "geometry": { "type": "LineString", "coordinates": [ [ 0.112, 4.28 ], [ 56.5, 5.52 ]  ] } },
+    { "type": "Feature", "properties": { "id": 10001, "startid": 15, "endid": 2, "metadata": {"width": 6.0, "grade": -15.0, "tag": ["main"]}  }, "geometry": { "type": "LineString", "coordinates": [ [ 56.5, 5.52 ] , [ 0.112, 4.28 ] ] } },
 
-    { "type": "Feature", "properties": { "id": 10002, "startid": 2, "endid": 3 }, "geometry": { "type": "LineString", "coordinates": [ [ 66.9, 3.64 ], [ 78.1, -48.4 ] ] } },
-    { "type": "Feature", "properties": { "id": 10002, "startid": 3, "endid": 2 }, "geometry": { "type": "LineString", "coordinates": [ [ 78.1, -48.4 ] , [ 66.9, 3.64 ]] } },
+    { "type": "Feature", "properties": { "id": 10002, "startid": 2, "endid": 3, "metadata": {"width": 8.0, "grade": -7.0, "tag": ["main"]}  }, "geometry": { "type": "LineString", "coordinates": [ [ 66.9, 3.64 ], [ 78.1, -48.4 ] ] } },
+    { "type": "Feature", "properties": { "id": 10002, "startid": 3, "endid": 2, "metadata": {"width": 8.0, "grade": 7.0, "tag": ["main"]}  }, "geometry": { "type": "LineString", "coordinates": [ [ 78.1, -48.4 ] , [ 66.9, 3.64 ]] } },
 
-    { "type": "Feature", "properties": { "id": 10003, "startid": 3, "endid": 4 }, "geometry": { "type": "LineString", "coordinates": [ [ 78.1, -48.4 ] , [ -2.44, -57.2 ] ] } },
-    { "type": "Feature", "properties": { "id": 10003, "startid": 4, "endid": 3 }, "geometry": { "type": "LineString", "coordinates": [ [ -2.44, -57.2 ], [ 78.1, -48.4 ] ] } },
+    { "type": "Feature", "properties": { "id": 10003, "startid": 3, "endid": 4, "metadata": {"width": 7.0, "grade": -0.3, "tag": ["main"]}  }, "geometry": { "type": "LineString", "coordinates": [ [ 78.1, -48.4 ] , [ -2.44, -57.2 ] ] } },
+    { "type": "Feature", "properties": { "id": 10003, "startid": 4, "endid": 3, "metadata": {"width": 7.0, "grade": 0.3, "tag": ["main"]}  }, "geometry": { "type": "LineString", "coordinates": [ [ -2.44, -57.2 ], [ 78.1, -48.4 ] ] } },
 
-    { "type": "Feature", "properties": { "id": 10004, "startid": 4, "endid": 1 }, "geometry": { "type": "LineString", "coordinates": [ [ -2.44, -57.2 ], [ -7.91, -3.51 ] ] } },
-    { "type": "Feature", "properties": { "id": 10004, "startid": 1, "endid": 4 }, "geometry": { "type": "LineString", "coordinates": [ [ -7.91, -3.51 ],[ -2.44, -57.2 ] ] } },
+    { "type": "Feature", "properties": { "id": 10004, "startid": 4, "endid": 1, "metadata": {"width": 15.0, "grade": -3.0, "tag": ["main"]}  }, "geometry": { "type": "LineString", "coordinates": [ [ -2.44, -57.2 ], [ -7.91, -3.51 ] ] } },
+    { "type": "Feature", "properties": { "id": 10004, "startid": 1, "endid": 4, "metadata": {"width": 15.0, "grade": 3.0, "tag": ["main"]}  }, "geometry": { "type": "LineString", "coordinates": [ [ -7.91, -3.51 ],[ -2.44, -57.2 ] ] } },
 
-    { "type": "Feature", "properties": { "id": 10005, "startid": 0, "endid": 5 }, "geometry": { "type": "LineString", "coordinates": [ [ 3.41, -1.15 ], [ -6.51, 24.1 ] ] } },
-    { "type": "Feature", "properties": { "id": 10005, "startid": 5, "endid": 0 }, "geometry": { "type": "LineString", "coordinates": [ [ -6.51, 24.1 ],[ 3.41, -1.15 ]] } },
+    { "type": "Feature", "properties": { "id": 10005, "startid": 0, "endid": 5, "metadata": {"width": 9.0, "grade": 2.0, "tag": ["main"]}  }, "geometry": { "type": "LineString", "coordinates": [ [ 3.41, -1.15 ], [ -6.51, 24.1 ] ] } },
+    { "type": "Feature", "properties": { "id": 10005, "startid": 5, "endid": 0, "metadata": {"width": 9.0, "grade": -2.0, "tag": ["main"]}  }, "geometry": { "type": "LineString", "coordinates": [ [ -6.51, 24.1 ],[ 3.41, -1.15 ]] } },
 
     { "type": "Feature", "properties": { "id": 10006, "startid": 5, "endid": 6 }, "geometry": { "type": "LineString", "coordinates": [ [ -6.51, 24.1 ], [ -5.53, 41.2 ] ] } },
     { "type": "Feature", "properties": { "id": 10006, "startid": 6, "endid": 5 }, "geometry": { "type": "LineString", "coordinates": [ [ -5.53, 41.2 ], [ -6.51, 24.1 ] ] } },
