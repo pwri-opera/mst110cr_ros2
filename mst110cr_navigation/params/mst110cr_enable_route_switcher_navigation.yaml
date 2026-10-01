@@ -74,7 +74,8 @@ bt_navigator:
     # Built-in plugins are added automatically
     plugin_lib_names: [
       "enable_route_switcher_bt_node",
-      "check_safety_bt_node"
+      "check_safety_bt_node",
+      "get_area_node"
       # "nav2_wait_action_bt_node",
       # "nav2_back_up_action_bt_node"
     ]
@@ -486,9 +487,9 @@ route_server:
     min_prune_dist_from_goal: 0.15
     min_prune_dist_from_start: 0.1
     prune_goal: False
-
-    graph_file_loader: "OperaGeoJsonGraphFileLoader"   # Name of default file loader
-      plugin: nav2_route::OperaGeoJsonGraphFileLoader  # file loader plugin to use
+    graph_file_loader: "OperaGeoJsonGraphFileLoader"  # Name of default file loader
+    OperaGeoJsonGraphFileLoader:  
+      plugin: "nav2_route::OperaGeoJsonGraphFileLoader"  # file loader plugin to use
 
 velocity_smoother:
   ros__parameters:

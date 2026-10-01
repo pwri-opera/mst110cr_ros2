@@ -45,6 +45,7 @@
                     <!-- Find if the route start node is far from the robot's current pose; if so, connect them for 'first mile'. -->
                     <ReactiveSequence>
                       <GetCurrentPose current_pose="{current_pose}"/>
+                      <GetArea pose="{current_pose}" area_id="{area_id}" service_name="get_area"/>  
                       <GetPoseFromPath path="{route_path}" index="0" pose="{route_start_pose}"/>
                       <Inverter>
                         <ArePosesNear ref_pose="{current_pose}" target_pose="{route_start_pose}" tolerance="0.3"/>
@@ -96,6 +97,7 @@
                     <!-- Find if the route start node is far from the robot's current pose; if so, connect them for 'first mile'. -->
                     <ReactiveSequence>
                       <GetCurrentPose current_pose="{current_pose}"/>
+                      <GetArea pose="{current_pose}" area_id="{area_id}" service_name="get_area"/>   
                       <GetPoseFromPath path="{route_path}" index="0" pose="{route_start_pose}"/>
                       <Inverter>
                         <ArePosesNear ref_pose="{current_pose}" target_pose="{route_start_pose}" tolerance="0.3"/>
