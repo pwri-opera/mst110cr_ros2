@@ -15,6 +15,7 @@ def generate_launch_description():
 
     use_navigation_xy_goal_tolerance_arg = DeclareLaunchArgument('navigation_xy_goal_tolerance', default_value='1.0')
     use_navigation_yaw_goal_tolerance_arg = DeclareLaunchArgument('navigation_yaw_goal_tolerance', default_value='0.15')    
+    use_sim_time_arg = DeclareLaunchArgument('use_sim_time', default_value='false')
     
     mst110cr_com3_ros_dir = get_package_share_directory("mst110cr_com3ros")
     gnss_localizer_ros2 = get_package_share_directory("gnss_localizer_ros2")
@@ -33,14 +34,15 @@ def generate_launch_description():
 
     use_navigation_xy_goal_tolerance = LaunchConfiguration('navigation_xy_goal_tolerance')
     use_navigation_yaw_goal_tolerance = LaunchConfiguration('navigation_yaw_goal_tolerance')
+    use_sim_time = LaunchConfiguration('use_sim_time')
 
     return LaunchDescription([
         use_navigation_xy_goal_tolerance_arg,
         use_navigation_yaw_goal_tolerance_arg,
+        use_sim_time_arg,
 
         IncludeLaunchDescription(
                 PythonLaunchDescriptionSource(mst110cr_com3_ros_launch_file),
-                # launch_arguments={'use_sim_time': 'true'}.items(),
         ),
         IncludeLaunchDescription(
                 PythonLaunchDescriptionSource(gnss_localizer_ros2_launch_file_path),
@@ -52,7 +54,7 @@ def generate_launch_description():
             launch_arguments={
                 'robot_name': robot_name,
                 'use_namespace': 'true',
-                'use_sim_time': 'false',
+                'use_sim_time': use_sim_time,
             }.items(),
         ),
 
@@ -61,7 +63,7 @@ def generate_launch_description():
             launch_arguments={
                 'robot_name': robot_name,
                 'use_namespace': 'true',
-                'use_sim_time': 'false',
+                'use_sim_time': use_sim_time,
                 'navigation_xy_goal_tolerance': use_navigation_xy_goal_tolerance,
                 'navigation_yaw_goal_tolerance': use_navigation_yaw_goal_tolerance
             }.items(),
@@ -91,7 +93,7 @@ def generate_launch_description():
                 parameters=[
                     params,
                     {
-                        'use_sim_time': True
+                        'use_sim_time': use_sim_time
                     }
                 ]
             ),
@@ -103,7 +105,7 @@ def generate_launch_description():
                 parameters=[
                     params,
                     {
-                    'use_sim_time': True
+                    'use_sim_time': use_sim_time
                     }
                 ]
             ),

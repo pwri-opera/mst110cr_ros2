@@ -1,0 +1,19 @@
+{
+    "type": "FeatureCollection",
+    "name": "pwri_dxfield_northeast",
+    "crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:EPSG::3857" } },
+    "features": [
+    { "type": "Feature", "properties": { "id": 0 }, "geometry": { "type": "Point", "coordinates": [ 80.0, 60.0 ] } },
+    { "type": "Feature", "properties": { "id": 1 }, "geometry": { "type": "Point", "coordinates": [ 90.0, 15.0 ] } },
+    { "type": "Feature", "properties": { "id": 2 }, "geometry": { "type": "Point", "coordinates": [ 104.6443, 18.2543 ] } },
+    { "type": "Feature", "properties": { "id": 3 }, "geometry": { "type": "Point", "coordinates": [ 94.6443, 63.2543 ] } },
+    { "type": "Feature", "properties": { "id": 10000, "startid": 0, "endid": 1 }, "geometry": { "type": "LineString", "coordinates": [ [ 80.0, 60.0 ], [ 90.0, 15.0 ]] } },
+    { "type": "Feature", "properties": { "id": 10001, "startid": 1, "endid": 0 }, "geometry": { "type": "LineString", "coordinates": [ [ 90.0, 15.0 ], [ 80.0, 60.0 ]] } },
+    { "type": "Feature", "properties": { "id": 10002, "startid": 1, "endid": 2 }, "geometry": { "type": "LineString", "coordinates": [ [ 90.0, 15.0 ], [ 104.6443, 18.2543 ]] } },
+    { "type": "Feature", "properties": { "id": 10003, "startid": 2, "endid": 1 }, "geometry": { "type": "LineString", "coordinates": [ [ 104.6443, 18.2543 ], [ 90.0, 15.0 ]] } },
+    { "type": "Feature", "properties": { "id": 10004, "startid": 2, "endid": 3 }, "geometry": { "type": "LineString", "coordinates": [ [ 104.6443, 18.2543 ], [ 94.6443, 63.2543 ]] } },
+    { "type": "Feature", "properties": { "id": 10005, "startid": 3, "endid": 2 }, "geometry": { "type": "LineString", "coordinates": [ [ 94.6443, 63.2543 ], [ 104.6443, 18.2543 ]] } },
+    { "type": "Feature", "properties": { "id": 10006, "startid": 3, "endid": 0 }, "geometry": { "type": "LineString", "coordinates": [ [ 94.6443, 63.2543 ], [ 80.0, 60.0 ]] } },
+    { "type": "Feature", "properties": { "id": 10007, "startid": 0, "endid": 3 }, "geometry": { "type": "LineString", "coordinates": [ [ 80.0, 60.0 ], [ 94.6443, 63.2543 ]] } }
+    ]
+}
