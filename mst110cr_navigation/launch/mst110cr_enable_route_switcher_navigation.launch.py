@@ -133,7 +133,7 @@ def generate_launch_description():
 
     declare_graph_file_cmd = DeclareLaunchArgument(
         'graph',
-        default_value='/home/opera/humble_ws/src/mst110cr_ros2/mst110cr_navigation/graphs/operasim_physx_named.geojson', description='Path to the graph file to load'
+        default_value='/home/opera/mst110cr_ws/src/mst110cr_ros2/mst110cr_navigation/graphs/pwri_dxfield_northeast.geojson', description='Path to the graph file to load'
     )
 
     declare_autostart_cmd = DeclareLaunchArgument(
@@ -183,7 +183,7 @@ def generate_launch_description():
             respawn=use_respawn,
             respawn_delay=2.0,
             parameters=[{
-                'yaml_filename': '/home/opera/humble_ws/src/mst110cr_ros2/mst110cr_unity/map/operasim_physx_vizmap.yaml',
+                'yaml_filename': '/home/opera/mst110cr_ws/src/mst110cr_ros2/mst110cr_unity/map/operasim_physx_vizmap.yaml',
                 'topic_name': 'vizmap',
                 'frame_id': 'map',
                 'introspection_mode': 'disabled'

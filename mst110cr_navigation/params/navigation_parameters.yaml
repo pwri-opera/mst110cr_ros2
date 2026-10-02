@@ -110,22 +110,25 @@ bt_navigator:
 
 controller_server:
   ros__parameters:
-    use_sim_time: false
-    controller_frequency: 5.0
-    min_x_velocity_threshold: 0.002
-    # min_y_velocity_threshold: 0.5
-    min_theta_velocity_threshold: 0.01
-    failure_tolerance: 0.3
-    progress_checker_plugin: "progress_checker"
+    use_sim_time: False
+    enable_stamped_cmd_vel: False
+    controller_frequency: 20.0
+    min_x_velocity_threshold: 0.001
+    min_y_velocity_threshold: 0.5
+    min_theta_velocity_threshold: 0.001
+    failure_tolerance: -1.0
+    progress_checker_plugins: ["progress_checker"]
     goal_checker_plugins: ["general_goal_checker"] # "precise_goal_checker"
-    controller_plugins: ["RPP", "RSC", "FollowPath"]
+    controller_plugins: ["FollowPath"]
+    use_realtime_priority: false
     odom_topic: /mst110cr_2/odom_pose
 
     # Progress checker parameters
     progress_checker:
-      plugin: "nav2_controller::SimpleProgressChecker"
-      required_movement_radius: 0.5
-      movement_time_allowance: 10.0
+      plugin: "nav2_controller::PoseProgressChecker"
+      required_movement_radius: 0.2
+      required_movement_angle: 0.3
+      movement_time_allowance: 60.0
     # Goal checker parameters
     #precise_goal_checker:
     #  plugin: "nav2_controller::SimpleGoalChecker"
@@ -133,168 +136,110 @@ controller_server:
     #  yaw_goal_tolerance: 0.25
     #  stateful: True
     general_goal_checker:
-      stateful: True
+      stateful: true
       plugin: "nav2_controller::SimpleGoalChecker"
-      xy_goal_tolerance: 1.0
-      yaw_goal_tolerance: 0.15
-
-
-    RSC:
-      plugin: "nav2_rotation_shim_controller::RotationShimController"
-      primary_controller: "nav2_regulated_pure_pursuit_controller::RegulatedPurePursuitController"
-      angular_dist_threshold: 10.0 #[rad]
-      forward_sampling_distance: 1.0
-      angular_disengage_threshold: 0.3925
-      rotate_to_heading_angular_vel: 0.5
-      max_angular_accel: 2.0
-      simulate_ahead_time: 1.0
-      rotate_to_goal_heading: true
-
-      use_velocity_scaled_lookahead_dist: true
-      # --- if use_velocity_scaled_lookahead_dist is true ---
-      lookahead_time: 2.2              # （据え置き）終盤で見過ぎない
-      min_lookahead_dist: 2.0          # 1.2 → 1.4
-      max_lookahead_dist: 3.0          # 3.5 → 3.0
-
-      # --- if use_velocity_scaled_lookahead_dist is false ---
-      #lookahead_dist: 1.0
-
-      use_fixed_curvature_lookahead: true
-      # --- if use_fixed_curvature_lookahead is true ---
-      interpolate_curvature_after_goal: false
-
-
-      curvature_lookahead_dist: 2.0    # 2.2 → 2.6
-      desired_linear_vel: 1.0
-      approach_velocity_scaling_dist: 3.5  # 1.2 → 2.0（早め減速）
-      min_approach_linear_velocity: 0.25   # 0.15 → 0.25（低速すぎ蛇行を防止）
- 
-      use_rotate_to_heading: false
-      # --- if use_rotate_to_heading is true ---
-      # rotate_to_heading_angular_vel: 0.5
-      # rotate_to_heading_min_angle: 0.5
-      # max_angular_accel: 2.0
-
-      # --- use_rotate_to_heading is false ---
-      allow_reversing: true
-
-
-      use_regulated_linear_velocity_scaling: true
-      # --- if use_regulated_linear_velocity_scaling is true ---
-      regulated_linear_scaling_min_radius: 3.8   # 1.8 → 2.2（早めに減速）
-
-      regulated_linear_scaling_min_speed: 0.05   # 0.25 → 0.15（低速で粘る）
- 
-      use_cost_regulated_linear_velocity_scaling: true
-      # --- if use_cost_regulated_linear_velocity_scaling is true ---
-      cost_scaling_dist: 0.5
-      cost_scaling_gain: 1.0
- 
-      use_collision_detection: true
-      # --- if use_collision_detection is true ---
-      max_allowed_time_to_collision_up_to_carrot: 2.0  # 1.5 → 2.0（ON/OFFの細かい切替を緩和）
- 
-      max_robot_pose_search_dist: 1.0  # 3.0 → 2.0（近傍点を確実に拾って急舵を防ぐ）
-      transform_tolerance: 0.2
-      stateful: true
-
-
-
-    RPP:
-      plugin: "nav2_regulated_pure_pursuit_controller::RegulatedPurePursuitController"
-
-      use_velocity_scaled_lookahead_dist: true
-      # --- if use_velocity_scaled_lookahead_dist is true ---
-      lookahead_time: 2.2              # （据え置き）終盤で見過ぎない
-      min_lookahead_dist: 2.0          # 1.2 → 1.4
-      max_lookahead_dist: 3.0          # 3.5 → 3.0
-
-      # --- if use_velocity_scaled_lookahead_dist is false ---
-      #lookahead_dist: 1.0
-
-      use_fixed_curvature_lookahead: true
-      # --- if use_fixed_curvature_lookahead is true ---
-      interpolate_curvature_after_goal: false
-
-
-      curvature_lookahead_dist: 2.0    # 2.2 → 2.6
-      desired_linear_vel: 1.0
-      approach_velocity_scaling_dist: 3.5  # 1.2 → 2.0（早め減速）
-      min_approach_linear_velocity: 0.25   # 0.15 → 0.25（低速すぎ蛇行を防止）
- 
-      use_rotate_to_heading: false
-
-      # --- if use_rotate_to_heading is true ---
-      # rotate_to_heading_angular_vel: 0.5
-      # rotate_to_heading_min_angle: 0.5
-      # max_angular_accel: 2.0
-
-      # --- use_rotate_to_heading is false ---
-      allow_reversing: true
-
-
-      use_regulated_linear_velocity_scaling: true
-      # --- if use_regulated_linear_velocity_scaling is true ---
-      regulated_linear_scaling_min_radius: 3.8   # 1.8 → 2.2（早めに減速）
-
-      regulated_linear_scaling_min_speed: 0.05   # 0.25 → 0.15（低速で粘る）
- 
-      use_cost_regulated_linear_velocity_scaling: true
-      # --- if use_cost_regulated_linear_velocity_scaling is true ---
-      cost_scaling_dist: 0.5
-      cost_scaling_gain: 1.0
- 
-      use_collision_detection: true
-      # --- if use_collision_detection is true ---
-      max_allowed_time_to_collision_up_to_carrot: 2.0  # 1.5 → 2.0（ON/OFFの細かい切替を緩和）
- 
-      max_robot_pose_search_dist: 1.0  # 3.0 → 2.0（近傍点を確実に拾って急舵を防ぐ）
-      transform_tolerance: 0.2
-      stateful: true
-
-
+      xy_goal_tolerance: 0.3
+      yaw_goal_tolerance: 0.1
 
     FollowPath:
-      plugin: "dwb_core::DWBLocalPlanner"
-      debug_trajectory_details: false
-      min_vel_x: -3.0
-      min_vel_y: 0.0
-      max_vel_x: 3.0
-      max_vel_y: 0.0
-      max_vel_theta: 1.0
-      min_speed_xy: -2.0
-      max_speed_xy: 2.0
-      min_speed_theta: -1.0
-      max_speed_theta: 1.0
-      acc_lim_x: 3.0 
-      acc_lim_y: 0.0
-      acc_lim_theta: 3.1
-      decel_lim_x: -2.5
-      decel_lim_y: 0.0
-      decel_lim_theta: -3.2
-      vx_samples: 25
-      vy_samples: 5
-      vtheta_samples: 25
-      # sim_time: 30.0
-      sim_time: 1.7
-      linear_granularity: 0.05
-      angular_granularity: 0.025
-      transform_tolerance: 0.2
-      xy_goal_tolerance: 0.25
-      trans_stopped_velocity: 0.25
-      short_circuit_trajectory_evaluation: True
-      stateful: True
-      critics: ["RotateToGoal", "Oscillation", "BaseObstacle", "GoalAlign", "PathAlign", "PathDist", "GoalDist"]
-      BaseObstacle.scale: 0.02
-      PathAlign.scale: 32.0
-      PathAlign.forward_point_distance: 0.1
-      GoalAlign.scale: 24.0
-      GoalAlign.forward_point_distance: 0.1
-      PathDist.scale: 32.0
-      GoalDist.scale: 24.0
-      RotateToGoal.scale: 32.0
-      RotateToGoal.slowing_factor: 5.0
-      RotateToGoal.lookahead_time: -1.0
+      plugin: "nav2_mppi_controller::MPPIController"
+      time_steps: 56             # 28 候補軌道の時間ステップ数（データ点数）
+      model_dt: 0.05            # 各時間ステップのdt（時間間隔）の長さ（秒単位）
+      batch_size: 1000         # 特定の反復において、現在の最適制御シーケンスからランダムにサンプリングされた候補軌道の数。50 Hzでは1000、30 Hzでは2000が良好な結果をもたらす模様。
+      ax_max: 12.0  # 3.0 # 6.0
+      ax_min: -18.0  # -6.0
+      ay_max: 3.0
+      ay_min: -3.0
+      az_max: 6.0  # 3.5 # 6.0
+      vx_std: 1.0  # 0.5  
+      vy_std: 0.1
+      wz_std: 2.0 # 0.2
+      vx_max: 1.0  # 0.6
+      vx_min: -1.0 # -0.6
+      vy_max: 0.5
+      wz_max: 0.35 # 1.9
+      iteration_count: 1        # MPPIアルゴリズムの反復回数。1のままにしておくことを推奨
+      prune_distance: 3.0    # 1.7
+      transform_tolerance: 0.25
+      temperature: 0.3          # MPPIアルゴリズムの温度パラメータ。値が小さいほど、最適な軌道に対する重みの差が大きくなる。
+      gamma: 0.015             # MPPIアルゴリズムの割引率。将来のコストが現在のコストに与える影響を制御する。値が小さいほど、アルゴリズムはより短期的なコストに焦点を当てる。
+      motion_model: "DiffDrive" # 軌道計画に使用する動モデルプラグイン。
+      visualize: true           # 
+      publish_optimal_trajectory: true # MPCによって計算された最適軌道（姿勢、速度、経由点のタイムスタンプ）を、可視化やデバッグのために公開する
+      regenerate_noises: true
+      TrajectoryVisualizer:
+        trajectory_step: 10
+        time_step: 3
+      AckermannConstraints:
+        min_turning_r: 0.2
+      critics: # 使用するCriticプラグイン関数のベクトル。
+        [
+          "ConstraintCritic",
+          "CostCritic",
+          "GoalCritic",
+          "GoalAngleCritic",
+          "PathAlignCritic",
+          "PathFollowCritic",
+          "PathAngleCritic",
+          "PreferForwardCritic",
+        ]
+      ConstraintCritic:  # 動的または運動学的制約の範囲外にある成分を含む軌道の評価を下げる   
+        enabled: true
+        cost_power: 1
+        cost_weight: 4.0
+      GoalCritic:        # 目標に適切な距離まで近づいた際に、目標に向かって移動するよう促す
+        enabled: true
+        cost_power: 1
+        cost_weight: 5.0
+        threshold_to_consider: 0.5
+      GoalAngleCritic:        # 目標位置に近い位置にいる際に、目標のポーズの角度に到達するよう誘導する
+        enabled: true
+        cost_power: 1
+        cost_weight: 3.0
+        threshold_to_consider: 0.5
+      PreferForwardCritic: # 前進を好むように誘導する。
+        enabled: false
+        cost_power: 1
+        cost_weight: 5.0
+        threshold_to_consider: 20.0
+      CostCritic: # コストマップのコストが高い位置を避けるように誘導する。コストマップのコストが高い位置を通る軌道の評価を下げる。
+        enabled: false
+        cost_power: 1
+        cost_weight: 3.81
+        near_collision_cost: 253
+        critical_cost: 300.0
+        consider_footprint: false
+        collision_cost: 1000000.0
+        near_goal_distance: 1.0
+        trajectory_point_step: 2
+      PathAlignCritic: # 経路に沿うように誘導する。軌道の点が経路から遠いほど、コストが上がる。軌道の点が経路から近いほど、コストが下がる。
+        enabled: true
+        cost_power: 1
+        cost_weight: 5.0
+        max_path_occupancy_ratio: 0.05
+        trajectory_point_step: 4
+        threshold_to_consider: 0.5
+        offset_from_furthest: 8       # 候補となる軌道が、アライメント批評器を適用するために必要な経路追跡の過程において、十分に進行しているかどうかを確認します。これにより、実際に経路を追跡している場合にのみ経路アライメントが考慮されるようになり
+        use_path_orientations: true    # 経路の整列処理において、経路の向きを考慮するかどうか。これは、実行可能なSMACプランナーと組み合わせることで、SMACプランナーが要求した場所・タイミングでのみ方向転換を行うよう促すのに有用
+      PathFollowCritic:    # 経路に沿って移動するように誘導する。軌道の点が経路から遠いほど、コストが上がる。
+        enabled: true
+        cost_power: 1
+        cost_weight: 5.0 # 20
+        offset_from_furthest: 10 # 10
+        threshold_to_consider: 0.5
+      PathAngleCritic: # このクリティカル点は、経路に対して相対的な角度が大きい軌道をペナルティの対象とします
+        enabled: true
+        cost_power: 1
+        cost_weight: 4.0
+        offset_from_furthest: 4
+        threshold_to_consider: 0.5 # ロボットと目標地点との距離（m）。この距離に達すると、経路の角度を考慮しなくなり、目標地点の判定ロジックが優先される。
+        max_angle_to_furthest: 1.0
+        mode: 2
+      VelocityDeadbandCritic:
+        enabled: true
+        cost_power: 1
+        cost_weight: 35.0
+        deadband_velocities: [0.2, 0.01, 0.05]
 
 local_costmap:
   local_costmap:
@@ -497,16 +442,14 @@ waypoint_follower:
 
 velocity_smoother:
   ros__parameters:
-    smoothing_frequency: 10.0
+    smoothing_frequency: 20.0
     scale_velocities: False
     feedback: "OPEN_LOOP"
-    # max_velocity: [1.0, 0.0, 0.3490658504]
-    # min_velocity: [-1.0, 0.0, -0.3490658504]
-    max_velocity: [1.0, 0.0, 0.5]
-    min_velocity: [-1.0, 0.0, -0.5]
-    max_accel: [2.0, 0.0, 1.0]
-    max_decel: [-2.0, 0.0, -1.0]
-    odom_topic: /mst110cr_2/odom_pose
-    odom_duration: 2.0
-    deadband_velocity: [0.01, 0.0, 0.01]
-    velocity_timeout: 0.5
+    max_velocity: [0.5, 0.0, 0.08]
+    min_velocity: [-0.5, 0.0, -0.08]
+    max_accel: [0.35, 0.0, 0.5]
+    max_decel: [-1.0, 0.0, -1.0]
+    odom_topic: "odom"
+    odom_duration: 0.1
+    deadband_velocity: [0.0, 0.0, 0.0]
+    velocity_timeout: 1.0

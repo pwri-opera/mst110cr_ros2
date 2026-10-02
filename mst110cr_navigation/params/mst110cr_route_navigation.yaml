@@ -63,8 +63,8 @@ bt_navigator:
     # nav2_bt_navigator/navigate_to_pose_w_replanning_and_recovery.xml
     # nav2_bt_navigator/navigate_through_poses_w_replanning_and_recovery.xml
     # They can be set here or via a RewrittenYaml remap from a parent launch file to Nav2.
-    default_nav_through_poses_bt_xml: "/home/opera/humble_ws/src/mst110cr_ros2/mst110cr_navigation/params/navigate_w_routing_global_planning_and_control_w_recovery.xml"
-    default_nav_to_pose_bt_xml: "/home/opera/humble_ws/src/mst110cr_ros2/mst110cr_navigation/params/navigate_w_routing_global_planning_and_control_w_recovery.xml"
+    default_nav_through_poses_bt_xml: "/home/opera/mst110cr_ws/src/mst110cr_ros2/mst110cr_navigation/params/navigate_w_routing_global_planning_and_control_w_recovery.xml"
+    default_nav_to_pose_bt_xml: "/home/opera/mst110cr_ws/src/mst110cr_ros2/mst110cr_navigation/params/navigate_w_routing_global_planning_and_control_w_recovery.xml"
 
     # plugin_lib_names is used to add custom BT plugins to the executor (vector of strings).
     # Built-in plugins are added automatically
@@ -87,23 +87,25 @@ bt_navigator:
 
 controller_server:
   ros__parameters:
+    use_sim_time: False
+    enable_stamped_cmd_vel: False
     controller_frequency: 20.0
-    costmap_update_timeout: 0.30
     min_x_velocity_threshold: 0.001
     min_y_velocity_threshold: 0.5
     min_theta_velocity_threshold: 0.001
-    failure_tolerance: 0.3
+    failure_tolerance: -1.0
     progress_checker_plugins: ["progress_checker"]
     goal_checker_plugins: ["general_goal_checker"] # "precise_goal_checker"
     controller_plugins: ["FollowPath"]
     use_realtime_priority: false
-    speed_limit_topic: "speed_limit"
+    odom_topic: /mst110cr_2/odom_pose
 
     # Progress checker parameters
     progress_checker:
-      plugin: "nav2_controller::SimpleProgressChecker"
-      required_movement_radius: 0.5
-      movement_time_allowance: 10.0
+      plugin: "nav2_controller::PoseProgressChecker"
+      required_movement_radius: 0.2
+      required_movement_angle: 0.3
+      movement_time_allowance: 60.0
     # Goal checker parameters
     #precise_goal_checker:
     #  plugin: "nav2_controller::SimpleGoalChecker"
@@ -111,42 +113,43 @@ controller_server:
     #  yaw_goal_tolerance: 0.25
     #  stateful: True
     general_goal_checker:
-      stateful: True
+      stateful: true
       plugin: "nav2_controller::SimpleGoalChecker"
-      xy_goal_tolerance: 2.0
-      yaw_goal_tolerance: 6.28
+      xy_goal_tolerance: 0.3
+      yaw_goal_tolerance: 0.1
+
     FollowPath:
       plugin: "nav2_mppi_controller::MPPIController"
-      time_steps: 56
-      model_dt: 0.05
-      batch_size: 2000
-      ax_max: 15.0  # 3.0
-      ax_min: -15.0  # -3.0
+      time_steps: 56             # 28 候補軌道の時間ステップ数（データ点数）
+      model_dt: 0.05            # 各時間ステップのdt（時間間隔）の長さ（秒単位）
+      batch_size: 1000         # 特定の反復において、現在の最適制御シーケンスからランダムにサンプリングされた候補軌道の数。50 Hzでは1000、30 Hzでは2000が良好な結果をもたらす模様。
+      ax_max: 12.0  # 3.0 # 6.0
+      ax_min: -18.0  # -6.0
       ay_max: 3.0
       ay_min: -3.0
-      az_max: 17.5  # 3.5
-      vx_std: 1.0  # 0.2 
-      vy_std: 0.2
-      wz_std: 2.0 # 0.4
-      vx_max: 3.0  # 0.5
-      vx_min: -1.0
+      az_max: 6.0  # 3.5 # 6.0
+      vx_std: 1.0  # 0.5  
+      vy_std: 0.1
+      wz_std: 2.0 # 0.2
+      vx_max: 1.0  # 0.6
+      vx_min: -1.0 # -0.6
       vy_max: 0.5
-      wz_max: 1.9
-      iteration_count: 1
-      prune_distance: 1000.0  # 1.7
-      transform_tolerance: 0.1
-      temperature: 0.3
-      gamma: 0.015
-      motion_model: "DiffDrive"
-      visualize: true
-      publish_optimal_trajectory: true
+      wz_max: 0.35 # 1.9
+      iteration_count: 1        # MPPIアルゴリズムの反復回数。1のままにしておくことを推奨
+      prune_distance: 3.0    # 1.7
+      transform_tolerance: 0.25
+      temperature: 0.3          # MPPIアルゴリズムの温度パラメータ。値が小さいほど、最適な軌道に対する重みの差が大きくなる。
+      gamma: 0.015             # MPPIアルゴリズムの割引率。将来のコストが現在のコストに与える影響を制御する。値が小さいほど、アルゴリズムはより短期的なコストに焦点を当てる。
+      motion_model: "DiffDrive" # 軌道計画に使用する動モデルプラグイン。
+      visualize: true           # 
+      publish_optimal_trajectory: true # MPCによって計算された最適軌道（姿勢、速度、経由点のタイムスタンプ）を、可視化やデバッグのために公開する
       regenerate_noises: true
       TrajectoryVisualizer:
-        trajectory_step: 5
+        trajectory_step: 10
         time_step: 3
       AckermannConstraints:
         min_turning_r: 0.2
-      critics:
+      critics: # 使用するCriticプラグイン関数のベクトル。
         [
           "ConstraintCritic",
           "CostCritic",
@@ -157,26 +160,26 @@ controller_server:
           "PathAngleCritic",
           "PreferForwardCritic",
         ]
-      ConstraintCritic:
-        enabled: false
+      ConstraintCritic:  # 動的または運動学的制約の範囲外にある成分を含む軌道の評価を下げる   
+        enabled: true
         cost_power: 1
         cost_weight: 4.0
-      GoalCritic:
+      GoalCritic:        # 目標に適切な距離まで近づいた際に、目標に向かって移動するよう促す
         enabled: true
         cost_power: 1
         cost_weight: 5.0
-        threshold_to_consider: 1.4
-      GoalAngleCritic:
+        threshold_to_consider: 0.5
+      GoalAngleCritic:        # 目標位置に近い位置にいる際に、目標のポーズの角度に到達するよう誘導する
         enabled: true
         cost_power: 1
         cost_weight: 3.0
         threshold_to_consider: 0.5
-      PreferForwardCritic:
-        enabled: true
+      PreferForwardCritic: # 前進を好むように誘導する。
+        enabled: false
         cost_power: 1
         cost_weight: 5.0
         threshold_to_consider: 20.0
-      CostCritic:
+      CostCritic: # コストマップのコストが高い位置を避けるように誘導する。コストマップのコストが高い位置を通る軌道の評価を下げる。
         enabled: false
         cost_power: 1
         cost_weight: 3.81
@@ -186,33 +189,34 @@ controller_server:
         collision_cost: 1000000.0
         near_goal_distance: 1.0
         trajectory_point_step: 2
-      PathAlignCritic:
-        enabled: true
-        cost_power: 1
-        cost_weight: 14.0
-        max_path_occupancy_ratio: 0.05
-        trajectory_point_step: 4
-        threshold_to_consider: 0.5
-        offset_from_furthest: 20
-        use_path_orientations: false
-      PathFollowCritic:
+      PathAlignCritic: # 経路に沿うように誘導する。軌道の点が経路から遠いほど、コストが上がる。軌道の点が経路から近いほど、コストが下がる。
         enabled: true
         cost_power: 1
         cost_weight: 5.0
-        offset_from_furthest: 5
-        threshold_to_consider: 1.4
-      PathAngleCritic:
+        max_path_occupancy_ratio: 0.05
+        trajectory_point_step: 4
+        threshold_to_consider: 0.5
+        offset_from_furthest: 8       # 候補となる軌道が、アライメント批評器を適用するために必要な経路追跡の過程において、十分に進行しているかどうかを確認します。これにより、実際に経路を追跡している場合にのみ経路アライメントが考慮されるようになり
+        use_path_orientations: true    # 経路の整列処理において、経路の向きを考慮するかどうか。これは、実行可能なSMACプランナーと組み合わせることで、SMACプランナーが要求した場所・タイミングでのみ方向転換を行うよう促すのに有用
+      PathFollowCritic:    # 経路に沿って移動するように誘導する。軌道の点が経路から遠いほど、コストが上がる。
         enabled: true
         cost_power: 1
-        cost_weight: 2.0
-        offset_from_furthest: 4
+        cost_weight: 5.0 # 20
+        offset_from_furthest: 10 # 10
         threshold_to_consider: 0.5
+      PathAngleCritic: # このクリティカル点は、経路に対して相対的な角度が大きい軌道をペナルティの対象とします
+        enabled: true
+        cost_power: 1
+        cost_weight: 4.0
+        offset_from_furthest: 4
+        threshold_to_consider: 0.5 # ロボットと目標地点との距離（m）。この距離に達すると、経路の角度を考慮しなくなり、目標地点の判定ロジックが優先される。
         max_angle_to_furthest: 1.0
-        mode: 0
-      # TwirlingCritic:
-      #   enabled: true
-      #   twirling_cost_power: 1
-      #   twirling_cost_weight: 10.0
+        mode: 2
+      VelocityDeadbandCritic:
+        enabled: true
+        cost_power: 1
+        cost_weight: 35.0
+        deadband_velocities: [0.2, 0.01, 0.05]
 
 local_costmap:
   local_costmap:
@@ -477,10 +481,10 @@ velocity_smoother:
     smoothing_frequency: 20.0
     scale_velocities: False
     feedback: "OPEN_LOOP"
-    max_velocity: [3.0, 0.0, 2.0]
-    min_velocity: [-3.0, 0.0, -2.0]
-    max_accel: [2.5, 0.0, 3.2]
-    max_decel: [-2.5, 0.0, -3.2]
+    max_velocity: [0.5, 0.0, 0.08]
+    min_velocity: [-0.5, 0.0, -0.08]
+    max_accel: [0.35, 0.0, 0.5]
+    max_decel: [-1.0, 0.0, -1.0]
     odom_topic: "odom"
     odom_duration: 0.1
     deadband_velocity: [0.0, 0.0, 0.0]

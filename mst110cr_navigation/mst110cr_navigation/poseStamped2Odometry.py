@@ -16,9 +16,9 @@ class PoseToOdomNode(Node):
         super().__init__('pose_to_odom')
 
         odom_header_frame_param = self.declare_parameter('odom_header_frame', 'world')
-        odom_child_frame_param = self.declare_parameter('odom_child_frame', '/mst110cr/gnss/base_link')
-        poseStamped_topic_name_param = self.declare_parameter('poseStamped_topic_name', '/mst110cr/global_pose')
-        odom_topic_name_param = self.declare_parameter('odom_topic_name', '/mst110cr/gnss_odom')
+        odom_child_frame_param = self.declare_parameter('odom_child_frame', '/mst110cr_2/gnss/base_link')
+        poseStamped_topic_name_param = self.declare_parameter('poseStamped_topic_name', '/mst110cr_2/global_pose')
+        odom_topic_name_param = self.declare_parameter('odom_topic_name', '/mst110cr_2/gnss_odom')
 
         self.odom_header_frame = odom_header_frame_param.get_parameter_value().string_value
         self.odom_child_frame = odom_child_frame_param.get_parameter_value().string_value

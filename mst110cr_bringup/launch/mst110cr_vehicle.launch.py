@@ -41,9 +41,9 @@ def generate_launch_description():
         use_navigation_yaw_goal_tolerance_arg,
         use_sim_time_arg,
 
-        IncludeLaunchDescription(
-                PythonLaunchDescriptionSource(mst110cr_com3_ros_launch_file),
-        ),
+        # IncludeLaunchDescription(
+        #         PythonLaunchDescriptionSource(mst110cr_com3_ros_launch_file),
+        # ),
         IncludeLaunchDescription(
                 PythonLaunchDescriptionSource(gnss_localizer_ros2_launch_file_path),
                 # launch_arguments={'use_sim_time': 'true'}.items(),
@@ -58,16 +58,16 @@ def generate_launch_description():
             }.items(),
         ),
 
-        IncludeLaunchDescription(
-            PythonLaunchDescriptionSource(mst110cr_navigation_launch_file_path),
-            launch_arguments={
-                'robot_name': robot_name,
-                'use_namespace': 'true',
-                'use_sim_time': use_sim_time,
-                'navigation_xy_goal_tolerance': use_navigation_xy_goal_tolerance,
-                'navigation_yaw_goal_tolerance': use_navigation_yaw_goal_tolerance
-            }.items(),
-        ),
+        # IncludeLaunchDescription(
+        #     PythonLaunchDescriptionSource(mst110cr_navigation_launch_file_path),
+        #     launch_arguments={
+        #         'robot_name': robot_name,
+        #         'use_namespace': 'true',
+        #         'use_sim_time': use_sim_time,
+        #         'navigation_xy_goal_tolerance': use_navigation_xy_goal_tolerance,
+        #         'navigation_yaw_goal_tolerance': use_navigation_yaw_goal_tolerance
+        #     }.items(),
+        # ),
 
         GroupAction([
             PushRosNamespace(
