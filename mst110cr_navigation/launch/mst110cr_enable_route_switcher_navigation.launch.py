@@ -39,7 +39,7 @@ def generate_launch_description():
     # use_navigation_xy_goal_tolerance_arg = DeclareLaunchArgument('navigation_xy_goal_tolerance', default_value='1.0')
     # use_navigation_yaw_goal_tolerance_arg = DeclareLaunchArgument('navigation_yaw_goal_tolerance', default_value='0.15')
 
-    lifecycle_nodes_localization = ['map_server', 'vizmap_server']
+    lifecycle_nodes_localization = ['map_server']
 
     lifecycle_nodes_navigation = [
         'controller_server',
@@ -48,36 +48,38 @@ def generate_launch_description():
         'route_server',  # new
         'behavior_server',
         'velocity_smoother',
-        'collision_monitor',  # new
         'bt_navigator',
         'waypoint_follower',
         'docking_server',  # new
     ]
 
     # Map fully qualified names to relative ones so the node's namespace can be prepended.
-    remappings = [('mst110cr/tf', 'tf'), ('mst110cr/tf_static', 'tf_static')]
+    remappings = [('tf', '/tf'), ('tf_static', '/tf_static')]
 
     # Create our own temporary YAML files that include substitutions
     param_substitutions = {
-        'autostart': autostart, 
+        'bt_navigator.ros__parameters.default_nav_to_pose_bt_xml': os.path.join(mst110cr_navigation_dir, 'params', 'enable_route_compute_and_track_route_graph.xml'),
+        'bt_navigator.ros__parameters.default_nav_through_poses_bt_xml': os.path.join(mst110cr_navigation_dir, 'params', 'enable_route_compute_and_track_route_graph.xml'),
+        'autostart': autostart,
+        'use_sim_time': use_sim_time,
         # map yaml
         'map_server.ros__parameters.yaml_filename': map_yaml_file,
 
         # bt_navigator
         'bt_navigator.ros__parameters.robot_base_frame': [robot_name, '/base_link'],
-        'bt_navigator.ros__parameters.odom_topic': [robot_name, '/odom_pose'],
+        'bt_navigator.ros__parameters.odom_topic': ['/', robot_name, '/odom_pose'],
 
         # behavior_server
         'behavior_server.ros__parameters.robot_base_frame': [robot_name, '/base_link'],
         'behavior_server.ros__parameters.local_frame': [robot_name, '/odom'],
 
         # controller_server
-        'controller_server.ros__parameters.odom_topic': [robot_name, '/odom_pose'],
+        'controller_server.ros__parameters.odom_topic': ['/', robot_name, '/odom_pose'],
         # 'controller_server.ros__parameters.general_goal_checker.xy_goal_tolerance': use_navigation_xy_goal_tolerance,
         # 'controller_server.ros__parameters.general_goal_checker.yaw_goal_tolerance': use_navigation_yaw_goal_tolerance,
 
         # velocity_smoother
-        'velocity_smoother.ros__parameters.odom_topic': [robot_name, '/odom_pose'],
+        'velocity_smoother.ros__parameters.odom_topic': ['/', robot_name, '/odom_pose'],
 
         # costmaps
         'local_costmap.local_costmap.ros__parameters.global_frame': [robot_name, '/odom'],
@@ -104,7 +106,7 @@ def generate_launch_description():
     configured_params = ParameterFile(
         RewrittenYaml(
             source_file=params_file,
-            root_key=robot_name,
+            root_key=namespace,
             param_rewrites=param_substitutions,
             convert_types=True
         ),
@@ -116,12 +118,12 @@ def generate_launch_description():
     )
 
     declare_namespace_cmd = DeclareLaunchArgument(
-        'namespace', default_value='mst110cr', description='Top-level namespace'
+        'namespace', default_value=LaunchConfiguration('robot_name'), description='Top-level namespace'
     )
 
     declare_use_sim_time_cmd = DeclareLaunchArgument(
         'use_sim_time',
-        default_value='True',
+        default_value='false',
         description='Use simulation (Gazebo) clock if true',
     )
 
@@ -133,7 +135,7 @@ def generate_launch_description():
 
     declare_graph_file_cmd = DeclareLaunchArgument(
         'graph',
-        default_value='/home/opera/mst110cr_ws/src/mst110cr_ros2/mst110cr_navigation/graphs/pwri_dxfield_northeast.geojson', description='Path to the graph file to load'
+        default_value=os.path.join(mst110cr_navigation_dir, 'graphs', 'pwri_dxfield_northeast.geojson'), description='Path to the graph file to load'
     )
 
     declare_autostart_cmd = DeclareLaunchArgument(
@@ -165,29 +167,13 @@ def generate_launch_description():
     )
 
     declare_robot_name_cmd = DeclareLaunchArgument(
-        'robot_name', default_value='mst110cr'
+        'robot_name', default_value='mst110cr_2'
     )
 
     load_localization_nodes = GroupAction([
         PushRosNamespace(
             # condition=IfCondition(True),
-            namespace=robot_name
-        ),
-
-        Node(
-            condition=IfCondition(use_sim_time),
-            package='nav2_map_server',
-            executable='map_server',
-            name='vizmap_server',
-            output='screen',
-            respawn=use_respawn,
-            respawn_delay=2.0,
-            parameters=[{
-                'yaml_filename': '/home/opera/mst110cr_ws/src/mst110cr_ros2/mst110cr_unity/map/operasim_physx_vizmap.yaml',
-                'topic_name': 'vizmap',
-                'frame_id': 'map',
-                'introspection_mode': 'disabled'
-            }],
+            namespace=namespace
         ),
 
         # #########################
@@ -200,7 +186,7 @@ def generate_launch_description():
             output='screen',
             respawn=use_respawn,
             respawn_delay=2.0,
-            parameters=[configured_params],
+            parameters=[configured_params, {'use_sim_time': use_sim_time, 'enable_stamped_cmd_vel': False}],
         ),
         Node(
             package='nav2_lifecycle_manager',
@@ -208,14 +194,15 @@ def generate_launch_description():
             name='lifecycle_manager_localization',
             output='screen',
             parameters=[{
-                'autostart': use_autostart,
+                'autostart': autostart,
+                'use_sim_time': use_sim_time,
                 'node_names': lifecycle_nodes_localization
             }]
         ),
         Node(
             package='rclcpp_components',
             executable='component_container_isolated',
-            name='nav2_container',
+            name=container_name,
             parameters=[configured_params, {'autostart': autostart}],
             arguments=['--ros-args', '--log-level', log_level],
             remappings=remappings,
@@ -226,7 +213,7 @@ def generate_launch_description():
 
     load_navigation_composable_nodes = GroupAction(
         actions=[
-            SetParameter('use_sim_time', True),
+            SetParameter('use_sim_time', use_sim_time),
             LoadComposableNodes(
                 target_container=container_name_full,
                 composable_node_descriptions=[
@@ -234,7 +221,7 @@ def generate_launch_description():
                         package='nav2_controller',
                         plugin='nav2_controller::ControllerServer',
                         name='controller_server',
-                        parameters=[configured_params],
+                        parameters=[configured_params, {'use_sim_time': use_sim_time, 'enable_stamped_cmd_vel': False}],
                         remappings=remappings + [('cmd_vel', 'cmd_vel_nav')],
                         namespace=namespace,
                     ),
@@ -242,7 +229,7 @@ def generate_launch_description():
                         package='nav2_smoother',
                         plugin='nav2_smoother::SmootherServer',
                         name='smoother_server',
-                        parameters=[configured_params],
+                        parameters=[configured_params, {'use_sim_time': use_sim_time, 'enable_stamped_cmd_vel': False}],
                         remappings=remappings,
                         namespace=namespace,
                     ),
@@ -250,7 +237,7 @@ def generate_launch_description():
                         package='nav2_planner',
                         plugin='nav2_planner::PlannerServer',
                         name='planner_server',
-                        parameters=[configured_params],
+                        parameters=[configured_params, {'use_sim_time': use_sim_time, 'enable_stamped_cmd_vel': False}],
                         remappings=remappings,
                         namespace=namespace,
                     ),
@@ -258,7 +245,7 @@ def generate_launch_description():
                         package='nav2_route',
                         plugin='nav2_route::RouteServer',
                         name='route_server',
-                        parameters=[configured_params, {'graph_filepath': graph_filepath}],
+                        parameters=[configured_params, {'graph_filepath': graph_filepath, 'use_sim_time': use_sim_time}],
                         remappings=remappings,
                         namespace=namespace,
                     ),
@@ -266,7 +253,7 @@ def generate_launch_description():
                         package='nav2_behaviors',
                         plugin='behavior_server::BehaviorServer',
                         name='behavior_server',
-                        parameters=[configured_params],
+                        parameters=[configured_params, {'use_sim_time': use_sim_time, 'enable_stamped_cmd_vel': False}],
                         remappings=remappings + [('cmd_vel', 'cmd_vel_nav')],
                         namespace=namespace,
                     ),
@@ -274,7 +261,7 @@ def generate_launch_description():
                         package='nav2_bt_navigator',
                         plugin='nav2_bt_navigator::BtNavigator',
                         name='bt_navigator',
-                        parameters=[configured_params],
+                        parameters=[configured_params, {'use_sim_time': use_sim_time, 'enable_stamped_cmd_vel': False}],
                         remappings=remappings,
                         namespace=namespace,
                     ),
@@ -282,7 +269,7 @@ def generate_launch_description():
                         package='nav2_waypoint_follower',
                         plugin='nav2_waypoint_follower::WaypointFollower',
                         name='waypoint_follower',
-                        parameters=[configured_params],
+                        parameters=[configured_params, {'use_sim_time': use_sim_time, 'enable_stamped_cmd_vel': False}],
                         remappings=remappings,
                         namespace=namespace,
                     ),
@@ -290,24 +277,18 @@ def generate_launch_description():
                         package='nav2_velocity_smoother',
                         plugin='nav2_velocity_smoother::VelocitySmoother',
                         name='velocity_smoother',
-                        parameters=[configured_params],
-                        remappings=remappings
-                        + [('cmd_vel', 'cmd_vel_nav')],
-                        namespace=namespace,
-                    ),
-                    ComposableNode(
-                        package='nav2_collision_monitor',
-                        plugin='nav2_collision_monitor::CollisionMonitor',
-                        name='collision_monitor',
-                        parameters=[configured_params],
-                        remappings=remappings,
+                        parameters=[configured_params, {'use_sim_time': use_sim_time, 'enable_stamped_cmd_vel': False}],
+                        remappings=remappings + [
+                            ('cmd_vel', 'cmd_vel_nav'),
+                            ('cmd_vel_smoothed', 'cmd_vel'),
+                        ],
                         namespace=namespace,
                     ),
                     ComposableNode(
                         package='opennav_docking',
                         plugin='opennav_docking::DockingServer',
                         name='docking_server',
-                        parameters=[configured_params],
+                        parameters=[configured_params, {'use_sim_time': use_sim_time, 'enable_stamped_cmd_vel': False}],
                         remappings=remappings,
                         namespace=namespace,
                     ),
@@ -316,7 +297,9 @@ def generate_launch_description():
                         plugin='nav2_lifecycle_manager::LifecycleManager',
                         name='lifecycle_manager_navigation',
                         parameters=[
-                            {'autostart': autostart, 'node_names': lifecycle_nodes_navigation}
+                            {'autostart': autostart,
+                             'use_sim_time': use_sim_time,
+                             'node_names': lifecycle_nodes_navigation}
                         ],
                         namespace=namespace,
                     ),
@@ -332,6 +315,7 @@ def generate_launch_description():
     ld.add_action(stdout_linebuf_envvar)
 
     # Declare the launch options
+    ld.add_action(declare_robot_name_cmd)
     ld.add_action(declare_namespace_cmd)
     ld.add_action(declare_use_sim_time_cmd)
     ld.add_action(declare_params_file_cmd)
@@ -341,7 +325,6 @@ def generate_launch_description():
     ld.add_action(declare_container_name_cmd)
     ld.add_action(declare_use_respawn_cmd)
     ld.add_action(declare_log_level_cmd)
-    ld.add_action(declare_robot_name_cmd)
     # Add the actions to launch all of the navigation nodes
     ld.add_action(load_localization_nodes)
     ld.add_action(load_navigation_composable_nodes)

@@ -31,7 +31,7 @@ public:
   static PortsList providedPorts()
   {
     return {
-      InputPort<double>("target_angle", 0.0, "目標 swing_joint 角度 [rad]"),
+      InputPort<double>("target_angle", 0.0, "目標 rotate_joint 角度 [rad]"),
       InputPort<double>("tolerance",   0.1, "到達判定の許容誤差 [rad]")
     };
   }
@@ -63,7 +63,7 @@ public:
     out.effort   = msg.effort;
 
     for (size_t i = 0; i < n; ++i) {
-      if (msg.name[i] == "swing_joint") {
+      if (msg.name[i] == "rotate_joint") {
         out.position[i] = target_angle_;
       } else if (i < msg.position.size()) {
         out.position[i] = msg.position[i];
@@ -76,7 +76,7 @@ public:
 
     if (std::fabs(current_angle_ - target_angle_) <= tolerance_) {
       RCLCPP_INFO(node_->get_logger(),
-                  "swing_joint reached %.3f (target %.3f)",
+                  "rotate_joint reached %.3f (target %.3f)",
                   current_angle_, target_angle_);
       return NodeStatus::SUCCESS;
     }
@@ -94,7 +94,7 @@ private:
   {
     last_msg_ = msg;
     for (size_t i = 0; i < msg->name.size(); ++i) {
-      if (msg->name[i] == "swing_joint" && i < msg->position.size()) {
+      if (msg->name[i] == "rotate_joint" && i < msg->position.size()) {
         current_angle_ = msg->position[i];
         break;
       }

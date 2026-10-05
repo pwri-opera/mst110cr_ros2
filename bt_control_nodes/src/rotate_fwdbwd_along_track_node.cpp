@@ -80,7 +80,7 @@ public:
     out.effort   = msg.effort;
 
     for (size_t i = 0; i < n; ++i) {
-      if (msg.name[i] == "swing_joint") {
+      if (msg.name[i] == "rotate_joint") {
         out.position[i] = target_angle_;
       } else if (i < msg.position.size()) {
         out.position[i] = msg.position[i];
@@ -109,7 +109,7 @@ private:
   {
     last_msg_ = msg;
     for (size_t i = 0; i < msg->name.size(); ++i) {
-      if (msg->name[i] == "swing_joint" && i < msg->position.size()) {
+      if (msg->name[i] == "rotate_joint" && i < msg->position.size()) {
         current_angle_ = msg->position[i];
         break;
       }

@@ -30,7 +30,7 @@
   </link>
   <!-- }}} Track ends here -->
   <!-- Body {{{ -->
-  <joint name="swing_joint" type="continuous">
+  <joint name="rotate_joint" type="continuous">
     <origin xyz="0 0 1"/>
     <axis xyz="0 0 1"/>
     <parent link="track_link"/>

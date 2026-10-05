@@ -40,13 +40,16 @@ def generate_launch_description():
         use_navigation_xy_goal_tolerance_arg,
         use_navigation_yaw_goal_tolerance_arg,
         use_sim_time_arg,
+        DeclareLaunchArgument("yaw_offset", default_value="0.0"),
 
         # IncludeLaunchDescription(
         #         PythonLaunchDescriptionSource(mst110cr_com3_ros_launch_file),
         # ),
+
         IncludeLaunchDescription(
                 PythonLaunchDescriptionSource(gnss_localizer_ros2_launch_file_path),
-                # launch_arguments={'use_sim_time': 'true'}.items(),
+                launch_arguments={'use_sim_time': use_sim_time,
+                                  'yaw_offset': LaunchConfiguration('yaw_offset')}.items(),
         ),
 
         IncludeLaunchDescription(

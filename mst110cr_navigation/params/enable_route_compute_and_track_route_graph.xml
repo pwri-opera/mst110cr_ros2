@@ -50,7 +50,7 @@
                       <Inverter>
                         <ArePosesNear ref_pose="{current_pose}" target_pose="{route_start_pose}" tolerance="0.3"/>
                       </Inverter>
-                      <ComputePathToPose goal="{route_start_pose}" path="{first_mile_path}" planner_id="{selected_planner}" error_code_id="{compute_path_error_code}" error_msg="{compute_path_error_msg}"/>23
+                      <ComputePathToPose goal="{route_start_pose}" path="{first_mile_path}" planner_id="{selected_planner}" error_code_id="{compute_path_error_code}" error_msg="{compute_path_error_msg}"/>
                       <ConcatenatePaths input_path1="{first_mile_path}" input_path2="{route_path}" output_path="{route_path}"/>
                     </ReactiveSequence>
 
