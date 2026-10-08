@@ -66,8 +66,8 @@ bt_navigator:
     # default_nav_through_poses_bt_xml: "/home/opera/mst110cr_ws/src/mst110cr_ros2/mst110cr_navigation/params/enable_route_navigate_w_routing_global_planning_and_control_w_recovery.xml"
     # default_nav_to_pose_bt_xml: "/home/opera/mst110cr_ws/src/mst110cr_ros2/mst110cr_navigation/params/enable_route_navigate_w_routing_global_planning_and_control_w_recovery.xml"
 
-    default_nav_through_poses_bt_xml: "//home/opera/mst110cr_ws/src/mst110cr_ros2/mst110cr_navigation/params/enable_route_compute_and_track_route_graph.xml"
-    default_nav_to_pose_bt_xml: "/home/opera/mst110cr_ws/src/mst110cr_ros2/mst110cr_navigation/params/enable_route_compute_and_track_route_graph.xml"
+    default_nav_through_poses_bt_xml: "//home/opera/mst110cr_ws/src/mst110cr_ros2/mst110cr_navigation/params/enable_route_compute_and_track_route_graph_2.xml"
+    default_nav_to_pose_bt_xml: "/home/opera/mst110cr_ws/src/mst110cr_ros2/mst110cr_navigation/params/enable_route_compute_and_track_route_graph_2.xml"
 
 
     # plugin_lib_names is used to add custom BT plugins to the executor (vector of strings).
@@ -141,12 +141,12 @@ controller_server:
       vx_std: 1.0  # 0.5  
       vy_std: 0.1
       wz_std: 2.0 # 0.2
-      vx_max: 1.0  # 0.6
-      vx_min: -1.0 # -0.6
+      vx_max: 1.5  # 0.6
+      vx_min: -1.5 # -0.6
       vy_max: 0.5
-      wz_max: 0.35 # 1.9
+      wz_max: 0.1 # 1.9
       iteration_count: 1        # MPPIアルゴリズムの反復回数。1のままにしておくことを推奨
-      prune_distance: 3.0    # 1.7
+      prune_distance: 5.0    # 1.7
       transform_tolerance: 0.25
       temperature: 0.3          # MPPIアルゴリズムの温度パラメータ。値が小さいほど、最適な軌道に対する重みの差が大きくなる。
       gamma: 0.015             # MPPIアルゴリズムの割引率。将来のコストが現在のコストに与える影響を制御する。値が小さいほど、アルゴリズムはより短期的なコストに焦点を当てる。
@@ -185,10 +185,10 @@ controller_server:
         cost_weight: 3.0
         threshold_to_consider: 0.5
       PreferForwardCritic: # 前進を好むように誘導する。
-        enabled: false
+        enabled: true
         cost_power: 1
         cost_weight: 5.0
-        threshold_to_consider: 20.0
+        threshold_to_consider: 10.0
       CostCritic: # コストマップのコストが高い位置を避けるように誘導する。コストマップのコストが高い位置を通る軌道の評価を下げる。
         enabled: false
         cost_power: 1
@@ -500,8 +500,8 @@ velocity_smoother:
     smoothing_frequency: 20.0
     scale_velocities: False
     feedback: "OPEN_LOOP"
-    max_velocity: [1.0, 0.0, 0.08]
-    min_velocity: [-1.0, 0.0, -0.08]
+    max_velocity: [1.5, 0.0, 0.1]
+    min_velocity: [-1.5, 0.0, -0.1]
     max_accel: [0.35, 0.0, 0.5]
     max_decel: [-1.0, 0.0, -1.0]
     odom_topic: "odom"
