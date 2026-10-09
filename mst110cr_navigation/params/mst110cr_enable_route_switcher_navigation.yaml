@@ -145,7 +145,7 @@ controller_server:
       vx_max: 1.5  # 0.6
       vx_min: -1.5 # -0.6
       vy_max: 0.5
-      wz_max: 0.1 # 1.9
+      wz_max: 0.15 # 1.9
       iteration_count: 1        # MPPIアルゴリズムの反復回数。1のままにしておくことを推奨
       prune_distance: 5.0    # 1.7
       transform_tolerance: 0.25
@@ -502,8 +502,8 @@ velocity_smoother:
     smoothing_frequency: 20.0
     scale_velocities: False
     feedback: "OPEN_LOOP"
-    max_velocity: [1.5, 0.0, 0.1]
-    min_velocity: [-1.5, 0.0, -0.1]
+    max_velocity: [1.5, 0.0, 0.15]
+    min_velocity: [-1.5, 0.0, -0.15]
     max_accel: [0.35, 0.0, 0.5]
     max_decel: [-1.0, 0.0, -1.0]
     odom_topic: "odom"
