@@ -154,6 +154,7 @@ controller_server:
       motion_model: "DiffDrive" # 軌道計画に使用する動モデルプラグイン。
       visualize: true           # 
       publish_optimal_trajectory: true # MPCによって計算された最適軌道（姿勢、速度、経由点のタイムスタンプ）を、可視化やデバッグのために公開する
+      publish_critics_stats: true
       regenerate_noises: true
       TrajectoryVisualizer:
         trajectory_step: 10
@@ -184,7 +185,7 @@ controller_server:
         enabled: true
         cost_power: 1
         cost_weight: 3.0
-        threshold_to_consider: 0.1
+        threshold_to_consider: 1.0
       PreferForwardCritic: # 前進を好むように誘導する。
         enabled: true
         cost_power: 1
@@ -203,7 +204,7 @@ controller_server:
       PathAlignCritic: # 経路に沿うように誘導する。軌道の点が経路から遠いほど、コストが上がる。軌道の点が経路から近いほど、コストが下がる。
         enabled: true
         cost_power: 1
-        cost_weight: 5.0
+        cost_weight: 10.0
         max_path_occupancy_ratio: 0.05
         trajectory_point_step: 4
         threshold_to_consider: 0.5

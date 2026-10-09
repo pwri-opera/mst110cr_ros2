@@ -18,7 +18,7 @@ Panels:
         - /Path1/Offset1
         - /TransformedGlobalPlan1
       Splitter Ratio: 0.6323529481887817
-    Tree Height: 349
+    Tree Height: 440
   - Class: rviz_common/Selection
     Name: Selection
   - Class: rviz_common/Tool Properties
@@ -79,20 +79,83 @@ Visualization Manager:
         History Policy: Keep Last
         Reliability Policy: Reliable
         Value: /mst110cr_2/robot_description
-      Enabled: false
+      Enabled: true
       Links:
         All Links Enabled: true
         Expand Joint Details: false
         Expand Link Details: false
         Expand Tree: false
         Link Tree Style: Links in Alphabetic Order
+        mst110cr_2/base_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        mst110cr_2/body_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        mst110cr_2/gnss_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        mst110cr_2/livox_fl:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        mst110cr_2/livox_fr:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        mst110cr_2/livox_rl:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        mst110cr_2/livox_rr:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        mst110cr_2/os_sensor:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        mst110cr_2/os_stand:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        mst110cr_2/track_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        mst110cr_2/vessel_cylinder_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        mst110cr_2/vessel_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        mst110cr_2/vessel_rod_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
       Mass Properties:
         Inertia: false
         Mass: false
       Name: RobotModel
       TF Prefix: ""
       Update Interval: 0
-      Value: false
+      Value: true
       Visual Enabled: true
     - Alpha: 1
       Axes Length: 1
@@ -354,8 +417,7 @@ Visualization Manager:
       Enabled: true
       Name: MarkerArray
       Namespaces:
-        Candidate Trajectories: true
-        Optimal Trajectory: true
+        {}
       Topic:
         Depth: 5
         Durability Policy: Volatile
@@ -468,31 +530,31 @@ Visualization Manager:
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Scale: 6.831520080566406
+      Scale: 8.55948543548584
       Target Frame: ""
       Value: TopDownOrtho (rviz_default_plugins)
-      X: 52.55573654174805
-      Y: 45.989463806152344
+      X: 50.569637298583984
+      Y: 25.485902786254883
     Saved: ~
 Window Geometry:
   Displays:
-    collapsed: true
+    collapsed: false
   Height: 1536
-  Hide Left Dock: true
-  Hide Right Dock: true
+  Hide Left Dock: false
+  Hide Right Dock: false
   Navigation 2:
-    collapsed: true
-  QMainWindow State: 000000ff00000000fd00000004000000000000023f0000056dfc020000000afb0000001200530065006c0065006300740069006f006e00000001e10000009b0000005c00fffffffb000000120056006900650077007300200054006f006f02000001df000002110000018500000122fb000000200054006f006f006c002000500072006f0070006500720074006900650073003203000002880000011d000002210000017afb0000001e0054006f006f006c002000500072006f0070006500720074006900650073000000003b0000005c0000005c00fffffffb000000100044006900730070006c006100790073000000009d00000198000000c700fffffffb0000002000730065006c0065006300740069006f006e00200062007500660066006500720200000138000000aa0000023a00000294fb00000014005700690064006500530074006500720065006f02000000e6000000d2000003ee0000030bfb0000000c004b0069006e0065006300740200000186000001060000030c00000261fb00000018004e0061007600690067006100740069006f006e00200032000000023b000001c7000001c700fffffffb000000200052006f007500740065002000410074007400720069006200750074006500730000000408000001a00000014500ffffff000000010000010f0000056dfc0200000003fb0000001e0054006f006f006c002000500072006f00700065007200740069006500730100000041000000780000000000000000fb0000000a00560069006500770073000000003b0000056d000000a000fffffffb0000001200530065006c0065006300740069006f006e010000025a000000b200000000000000000000000200000490000000a9fc0100000001fb0000000a00560069006500770073030000004e00000080000002e10000019700000003000004dd00000037fc0100000002fb0000000800540069006d00650100000000000004dd0000025300fffffffb0000000800540069006d00650100000000000004500000000000000000000004dd0000056d00000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
+    collapsed: false
+  QMainWindow State: 000000ff00000000fd00000004000000000000023f0000056dfc020000000afb0000001200530065006c0065006300740069006f006e00000001e10000009b0000005c00fffffffb000000120056006900650077007300200054006f006f02000001df000002110000018500000122fb000000200054006f006f006c002000500072006f0070006500720074006900650073003203000002880000011d000002210000017afb0000001e0054006f006f006c002000500072006f0070006500720074006900650073010000003b0000005c0000005c00fffffffb000000100044006900730070006c006100790073010000009d000001f3000000c700fffffffb0000002000730065006c0065006300740069006f006e00200062007500660066006500720200000138000000aa0000023a00000294fb00000014005700690064006500530074006500720065006f02000000e6000000d2000003ee0000030bfb0000000c004b0069006e0065006300740200000186000001060000030c00000261fb00000018004e0061007600690067006100740069006f006e002000320100000296000001c7000001c700fffffffb000000200052006f007500740065002000410074007400720069006200750074006500730100000463000001450000014500ffffff000000010000010f0000056dfc0200000003fb0000001e0054006f006f006c002000500072006f00700065007200740069006500730100000041000000780000000000000000fb0000000a00560069006500770073010000003b0000056d000000a000fffffffb0000001200530065006c0065006300740069006f006e010000025a000000b200000000000000000000000200000490000000a9fc0100000001fb0000000a00560069006500770073030000004e00000080000002e10000019700000003000009ba00000037fc0100000002fb0000000800540069006d00650100000000000009ba0000025300fffffffb0000000800540069006d00650100000000000004500000000000000000000006600000056d00000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
   Route Attributes:
-    collapsed: true
+    collapsed: false
   Selection:
     collapsed: false
   Time:
     collapsed: false
   Tool Properties:
-    collapsed: true
+    collapsed: false
   Views:
-    collapsed: true
-  Width: 1245
+    collapsed: false
+  Width: 2490
   X: 70
   Y: 27
