@@ -75,7 +75,8 @@ bt_navigator:
     plugin_lib_names: [
       "enable_route_switcher_bt_node",
       "check_safety_bt_node",
-      "get_area_node"
+      "get_area_node",
+      "align_path_orientations_bt_node"
       # "nav2_wait_action_bt_node",
       # "nav2_back_up_action_bt_node"
     ]
@@ -125,8 +126,8 @@ controller_server:
     general_goal_checker:
       stateful: true
       plugin: "nav2_controller::SimpleGoalChecker"
-      xy_goal_tolerance: 0.3
-      yaw_goal_tolerance: 0.1
+      xy_goal_tolerance: 1.0
+      yaw_goal_tolerance: 0.7853981633974483  # 45 degrees
 
     FollowPath:
       plugin: "nav2_mppi_controller::MPPIController"
@@ -183,7 +184,7 @@ controller_server:
         enabled: true
         cost_power: 1
         cost_weight: 3.0
-        threshold_to_consider: 0.5
+        threshold_to_consider: 0.1
       PreferForwardCritic: # 前進を好むように誘導する。
         enabled: true
         cost_power: 1

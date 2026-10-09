@@ -58,8 +58,8 @@ def generate_launch_description():
 
     # Create our own temporary YAML files that include substitutions
     param_substitutions = {
-        'bt_navigator.ros__parameters.default_nav_to_pose_bt_xml': os.path.join(mst110cr_navigation_dir, 'params', 'enable_route_compute_and_track_route_graph.xml'),
-        'bt_navigator.ros__parameters.default_nav_through_poses_bt_xml': os.path.join(mst110cr_navigation_dir, 'params', 'enable_route_compute_and_track_route_graph.xml'),
+        'bt_navigator.ros__parameters.default_nav_to_pose_bt_xml': os.path.join(mst110cr_navigation_dir, 'params', 'enable_route_compute_and_track_route_graph_2.xml'),
+        'bt_navigator.ros__parameters.default_nav_through_poses_bt_xml': os.path.join(mst110cr_navigation_dir, 'params', 'enable_route_compute_and_track_route_graph_2.xml'),
         'autostart': autostart,
         'use_sim_time': use_sim_time,
         # map yaml
