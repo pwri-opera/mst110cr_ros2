@@ -20,7 +20,7 @@ def generate_launch_description():
         'autostart': 'true',
         'use_rviz': 'true',
         'map': os.path.join(nav, 'map', 'map.yaml'),
-        'graph': os.path.join(nav, 'graphs', 'pwri_dxfield_northeast.geojson'),
+        'graph': os.path.join(nav, 'graphs', 'pwri_dxfield_261019_tuning.geojson'),
         'params_file': os.path.join(nav, 'params', 'mst110cr_enable_route_switcher_navigation.yaml'),
         'rviz_config': "/home/opera/mst110cr_ws/src/mst110cr_ros2/mst110cr_navigation/rviz2/mst110cr_navigation.rviz",
     }
