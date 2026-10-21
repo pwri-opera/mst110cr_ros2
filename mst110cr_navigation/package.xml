@@ -16,6 +16,8 @@
   <exec_depend>rviz2</exec_depend>
   <exec_depend>opera_rviz_plugins</exec_depend>
   <exec_depend>navigation2</exec_depend>
+  <exec_depend>nav2_rotation_shim_controller</exec_depend>
+  <exec_depend>nav2_mppi_controller</exec_depend>
   <exec_depend>nav2_route</exec_depend>
   <exec_depend>nav2_common</exec_depend>
   <exec_depend>nav2_collision_monitor</exec_depend>

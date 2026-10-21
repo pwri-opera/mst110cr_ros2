@@ -131,7 +131,24 @@ controller_server:
       yaw_goal_tolerance: 0.7853981633974483  # 45 degrees
 
     FollowPath:
-      plugin: "nav2_mppi_controller::MPPIController"
+      # BT selects FollowPath; the shim aligns a newly received path before MPPI tracks it.
+      # Same flat primary_controller layout as navigation_parameters_sim.yaml.
+      plugin: "nav2_rotation_shim_controller::RotationShimController"
+      primary_controller: "nav2_mppi_controller::MPPIController"
+      angular_dist_threshold: 0.785398       # Start alignment above 45 deg.
+      angular_disengage_threshold: 0.392699  # Hand off below 22.5 deg (supported versions).
+      forward_sampling_distance: 1.0
+      rotate_to_heading_angular_vel: 0.15   # Match MPPI and velocity_smoother limits.
+      max_angular_accel: 0.2                # Match velocity_smoother angular acceleration.
+      simulate_ahead_time: 1.0
+      rotate_to_goal_heading: true
+      rotate_to_heading_once: false        # Allow alignment when a new path is received.
+      use_path_orientations: false          # Face the sampled path position.
+      # Ramp from the preceding command: near-zero odom must not trap the ramp in deadband.
+      # Heading alignment still uses the measured robot pose.
+      closed_loop: false
+
+      # Primary MPPI parameters share the FollowPath namespace with the shim.
       time_steps: 200             # 28 候補軌道の時間ステップ数（データ点数）
       model_dt: 0.05            # 各時間ステップのdt（時間間隔）の長さ（秒単位）
       batch_size: 1000         # 特定の反復において、現在の最適制御シーケンスからランダムにサンプリングされた候補軌道の数。50 Hzでは1000、30 Hzでは2000が良好な結果をもたらす模様。
