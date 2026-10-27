@@ -169,7 +169,18 @@ controller_server:
       transform_tolerance: 0.25
       temperature: 0.3          # MPPIアルゴリズムの温度パラメータ。値が小さいほど、最適な軌道に対する重みの差が大きくなる。
       gamma: 0.015             # MPPIアルゴリズムの割引率。将来のコストが現在のコストに与える影響を制御する。値が小さいほど、アルゴリズムはより短期的なコストに焦点を当てる。
-      motion_model: "DiffDrive" # 軌道計画に使用する動モデルプラグイン。
+      motion_model: "CrawlerDump" # humble_main_crawlerdumpで追加したクローラ用動モデル。
+      CrawlerDumpConstraints:
+        # 車体側crawler_controller.hppのFF係数と合わせる（自動同期なし）。
+        track_width: 2.18                  # 左右クローラ中心間距離 [m]
+        turn_response: 0.3280683958262127   # 旋回応答係数
+        max_forward_speed: 2.0376389110634596 # 前進の等価速度上限 [m/s]
+        max_reverse_speed: 2.0520782549587606 # 後退の等価速度上限の絶対値 [m/s]
+        # 遅れは初期値0。MPPI出力から車体応答までの特性に合わせて設定する。
+        delay_vx: 0.0                     # 並進の時間遅れ [s]
+        delay_wz: 0.0                     # 旋回の時間遅れ [s]
+        time_constant_vx: 0.0             # 並進の一次遅れ時定数 [s]
+        time_constant_wz: 0.0             # 旋回の一次遅れ時定数 [s]
       visualize: true           # 
       publish_optimal_trajectory: true # MPCによって計算された最適軌道（姿勢、速度、経由点のタイムスタンプ）を、可視化やデバッグのために公開する
       publish_critics_stats: true
@@ -189,7 +200,7 @@ controller_server:
           "PathFollowCritic",
           "PathAngleCritic",
           "PreferForwardCritic",
-          "VelocityDeadbandCritic"
+          # "VelocityDeadbandCritic"
         ]
       ConstraintCritic:  # 動的または運動学的制約の範囲外にある成分を含む軌道の評価を下げる   
         enabled: true
@@ -232,7 +243,7 @@ controller_server:
       PathFollowCritic:    # 経路に沿って移動するように誘導する。軌道の点が経路から遠いほど、コストが上がる。
         enabled: true
         cost_power: 1
-        cost_weight: 5.0 # 5 # 20
+        cost_weight: 15.0 # 5 # 20
         offset_from_furthest: 10 # 10
         threshold_to_consider: 6.0
       PathAngleCritic: # このクリティカル点は、経路に対して相対的な角度が大きい軌道をペナルティの対象とします
@@ -243,11 +254,11 @@ controller_server:
         threshold_to_consider: 6.0 # ロボットと目標地点との距離（m）。この距離に達すると、経路の角度を考慮しなくなり、目標地点の判定ロジックが優先される。
         max_angle_to_furthest: 1.0
         mode: 2
-      VelocityDeadbandCritic:
-        enabled: true
-        cost_power: 1
-        cost_weight: 35.0
-        deadband_velocities: [0.0, 0.00, 0.06]
+      # VelocityDeadbandCritic:
+      #   enabled: false
+      #   cost_power: 1
+      #   cost_weight: 35.0
+      #   deadband_velocities: [0.0, 0.00, 0.06]
 
 velocity_smoother:
   ros__parameters:
