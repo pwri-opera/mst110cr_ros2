@@ -83,11 +83,13 @@ def generate_launch_description():
                         'world_frame' : 'map',
                         'use_sim_time': use_sim_time,
                         'odom0': 'ekf/odom_pose',
+                        # COM3 angular.z is upper-body rate, not base_link rate.
+                        # Use lower-body absolute yaw until a corrected rate exists.
                         'odom0_config': [
                             False,  False,  False,
                             False, False, False,
                             True, False, False,
-                            False, False, True,
+                            False, False, False,
                             False, False, False],
                         'odom0_differential': False,
                         'pose0': 'ekf/gnss_pose',
@@ -101,7 +103,7 @@ def generate_launch_description():
                             False, False, False],
                         'pose0_differential': False,
                         'pose0_relative': False,
-                        # First GNSS x/y/yaw only; the initializer holds all
+                        # Initial GNSS x/y and lower-body yaw; initializer holds all
                         # normal inputs until EKF publishes this initial state.
                         'pose1': 'ekf/initial_pose',
                         'pose1_config': [
@@ -112,6 +114,17 @@ def generate_launch_description():
                             False, False, False],
                         'pose1_differential': False,
                         'pose1_relative': False,
+                        # World-referenced lower-body heading from COM3 /imu.
+                        # The initializer gates this input until GNSS initialization.
+                        'pose2': 'ekf/lower_heading',
+                        'pose2_config': [
+                            False, False, False,
+                            False, False, True,
+                            False, False, False,
+                            False, False, False,
+                            False, False, False],
+                        'pose2_differential': False,
+                        'pose2_relative': False,
                         }]
             ),
         ])

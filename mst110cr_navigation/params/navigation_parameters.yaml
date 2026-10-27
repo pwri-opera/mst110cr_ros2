@@ -46,9 +46,8 @@ bt_navigator:
     robot_base_frame: mst110cr_2/base_link
     odom_topic: /mst110cr_2/odom_pose
 
-    # default_nav_to_pose_bt_xml: "mst110cr_navigation/params/mst110cr_navigate_to_pose_w_replanning_and_recovery.xml"
-    default_nav_to_pose_bt_xml: "/home/nvidia/ros2_ws/install/mst110cr_navigation/share/mst110cr_navigation/params/mst110cr_navigate_to_pose_w_replanning_and_recovery.xml"
-    # default_nav_through_poses_bt_xml: "/mst10cr_navigation/params/mst110cr_navigate_through_poses_w_replanning_and_recovery.xml"
+    # Resolved to params/navigate_to_pose_on_goal_update_w_recovery.xml by mst110cr_navigation.launch.py.
+    default_nav_to_pose_bt_xml: ""
 
     bt_loop_duration: 100
     default_server_timeout: 20
@@ -56,56 +55,9 @@ bt_navigator:
     # nav2_bt_navigator/navigate_to_pose_w_replanning_and_recovery.xml
     # nav2_bt_navigator/navigate_through_poses_w_replanning_and_recovery.xml
     # They can be set here or via a RewrittenYaml remap from a parent launch file to Nav2.
-    plugin_lib_names:
-      - nav2_compute_path_to_pose_action_bt_node
-      - nav2_compute_path_through_poses_action_bt_node
-      - nav2_smooth_path_action_bt_node
-      - nav2_follow_path_action_bt_node
-      - nav2_spin_action_bt_node
-      - nav2_wait_action_bt_node
-      - nav2_assisted_teleop_action_bt_node
-      - nav2_back_up_action_bt_node
-      - nav2_drive_on_heading_bt_node
-      - nav2_clear_costmap_service_bt_node
-      - nav2_is_stuck_condition_bt_node
-      - nav2_goal_reached_condition_bt_node
-      - nav2_goal_updated_condition_bt_node
-      - nav2_globally_updated_goal_condition_bt_node
-      - nav2_is_path_valid_condition_bt_node
-      - nav2_initial_pose_received_condition_bt_node
-      - nav2_reinitialize_global_localization_service_bt_node
-      - nav2_rate_controller_bt_node
-      - nav2_distance_controller_bt_node
-      - nav2_speed_controller_bt_node
-      - nav2_truncate_path_action_bt_node
-      - nav2_truncate_path_local_action_bt_node
-      - nav2_goal_updater_node_bt_node
-      - nav2_recovery_node_bt_node
-      - nav2_pipeline_sequence_bt_node
-      - nav2_round_robin_node_bt_node
-      - nav2_transform_available_condition_bt_node
-      - nav2_time_expired_condition_bt_node
-      - nav2_path_expiring_timer_condition
-      - nav2_distance_traveled_condition_bt_node
-      - nav2_single_trigger_bt_node
-      - nav2_goal_updated_controller_bt_node
-      - nav2_is_battery_low_condition_bt_node
-      - nav2_navigate_through_poses_action_bt_node
-      - nav2_navigate_to_pose_action_bt_node
-      - nav2_remove_passed_goals_action_bt_node
-      - nav2_planner_selector_bt_node
-      - nav2_controller_selector_bt_node
-      - nav2_goal_checker_selector_bt_node
-      - nav2_controller_cancel_bt_node
-      - nav2_path_longer_on_approach_bt_node
-      - nav2_wait_cancel_bt_node
-      - nav2_spin_cancel_bt_node
-      - nav2_back_up_cancel_bt_node
-      - nav2_assisted_teleop_cancel_bt_node
-      - nav2_drive_on_heading_cancel_bt_node
-      - nav2_is_battery_charging_condition_bt_node
-      - logger_node
-      - within_goal_radius_node
+    # Built-in Nav2 BT plugins are loaded automatically.
+    # Omit plugin_lib_names when no custom plugins are needed: an empty YAML
+    # list has no element type and can be rejected by ROS parameter conversion.
 
 
 controller_server:
@@ -138,34 +90,63 @@ controller_server:
     general_goal_checker:
       stateful: true
       plugin: "nav2_controller::SimpleGoalChecker"
-      xy_goal_tolerance: 0.3
-      yaw_goal_tolerance: 0.1
+      xy_goal_tolerance: 0.5  # m
+      yaw_goal_tolerance: 0.15  # rad
 
     FollowPath:
-      plugin: "nav2_mppi_controller::MPPIController"
-      time_steps: 56             # 28 候補軌道の時間ステップ数（データ点数）
+      # BT selects FollowPath; the shim aligns a newly received path before MPPI tracks it.
+      # Same flat primary_controller layout as navigation_parameters_sim.yaml.
+      plugin: "nav2_rotation_shim_controller::RotationShimController"
+      primary_controller: "nav2_mppi_controller::MPPIController"
+      angular_dist_threshold: 0.785398       # Start alignment above 45 deg.
+      angular_disengage_threshold: 0.392699  # Hand off below 22.5 deg (supported versions).
+      forward_sampling_distance: 1.0
+      rotate_to_heading_angular_vel: 0.1   # Match MPPI and velocity_smoother limits.
+      max_angular_accel: 0.2                # Match velocity_smoother angular acceleration.
+      simulate_ahead_time: 1.0
+      rotate_to_goal_heading: true
+      rotate_to_heading_once: false        # Allow alignment when a new path is received.
+      use_path_orientations: false          # Face the sampled path position.
+      # Ramp from the preceding command: near-zero odom must not trap the ramp in deadband.
+      # Heading alignment still uses the measured robot pose.
+      closed_loop: false
+
+      # Primary MPPI parameters share the FollowPath namespace with the shim.
+      time_steps: 200             # 28 候補軌道の時間ステップ数（データ点数）
       model_dt: 0.05            # 各時間ステップのdt（時間間隔）の長さ（秒単位）
       batch_size: 1000         # 特定の反復において、現在の最適制御シーケンスからランダムにサンプリングされた候補軌道の数。50 Hzでは1000、30 Hzでは2000が良好な結果をもたらす模様。
       ax_max: 12.0  # 3.0 # 6.0
       ax_min: -18.0  # -6.0
       ay_max: 3.0
       ay_min: -3.0
-      az_max: 6.0  # 3.5 # 6.0
-      vx_std: 1.0  # 0.5  
+      az_max: 0.5  # 3.5 # 6.0
+      vx_std: 0.3 # 0.5  # 1.5  # 0.5
       vy_std: 0.1
-      wz_std: 2.0 # 0.2
-      vx_max: 1.0  # 0.6
-      vx_min: -1.0 # -0.6
+      wz_std: 0.08 # 2.0 # 0.2 # 0.08
+      vx_max: 1.5
+      vx_min: -1.5 # -0.6
       vy_max: 0.5
-      wz_max: 0.35 # 1.9
+      wz_max: 0.15 # 1.9
       iteration_count: 1        # MPPIアルゴリズムの反復回数。1のままにしておくことを推奨
-      prune_distance: 3.0    # 1.7
+      prune_distance: 25.0    # 10秒の予測 × 前進上限1.5 m/sに余裕を確保
       transform_tolerance: 0.25
       temperature: 0.3          # MPPIアルゴリズムの温度パラメータ。値が小さいほど、最適な軌道に対する重みの差が大きくなる。
       gamma: 0.015             # MPPIアルゴリズムの割引率。将来のコストが現在のコストに与える影響を制御する。値が小さいほど、アルゴリズムはより短期的なコストに焦点を当てる。
-      motion_model: "DiffDrive" # 軌道計画に使用する動モデルプラグイン。
-      visualize: true           # 
+      motion_model: "CrawlerDump" # humble_main_crawlerdumpで追加したクローラ用動モデル。
+      CrawlerDumpConstraints:
+        # 車体側crawler_controller.hppのFF係数と合わせる（自動同期なし）。
+        track_width: 2.18                  # 左右クローラ中心間距離 [m]
+        turn_response: 0.3280683958262127   # 旋回応答係数
+        max_forward_speed: 2.0376389110634596 # 前進の等価速度上限 [m/s]
+        max_reverse_speed: 2.0520782549587606 # 後退の等価速度上限の絶対値 [m/s]
+        # 遅れは初期値0。MPPI出力から車体応答までの特性に合わせて設定する。
+        delay_vx: 0.0                     # 並進の時間遅れ [s]
+        delay_wz: 0.0                     # 旋回の時間遅れ [s]
+        time_constant_vx: 0.0             # 並進の一次遅れ時定数 [s]
+        time_constant_wz: 0.0             # 旋回の一次遅れ時定数 [s]
+      visualize: true           #
       publish_optimal_trajectory: true # MPCによって計算された最適軌道（姿勢、速度、経由点のタイムスタンプ）を、可視化やデバッグのために公開する
+      publish_critics_stats: true
       regenerate_noises: true
       TrajectoryVisualizer:
         trajectory_step: 10
@@ -182,26 +163,27 @@ controller_server:
           "PathFollowCritic",
           "PathAngleCritic",
           "PreferForwardCritic",
+          # "VelocityDeadbandCritic"
         ]
-      ConstraintCritic:  # 動的または運動学的制約の範囲外にある成分を含む軌道の評価を下げる   
+      ConstraintCritic:  # 動的または運動学的制約の範囲外にある成分を含む軌道の評価を下げる
         enabled: true
         cost_power: 1
         cost_weight: 4.0
       GoalCritic:        # 目標に適切な距離まで近づいた際に、目標に向かって移動するよう促す
         enabled: true
         cost_power: 1
-        cost_weight: 5.0
-        threshold_to_consider: 0.5
+        cost_weight: 15.0  # 25.0 (10/27)
+        threshold_to_consider: 7.0
       GoalAngleCritic:        # 目標位置に近い位置にいる際に、目標のポーズの角度に到達するよう誘導する
         enabled: true
         cost_power: 1
         cost_weight: 3.0
-        threshold_to_consider: 0.5
+        threshold_to_consider: 0.8
       PreferForwardCritic: # 前進を好むように誘導する。
-        enabled: false
+        enabled: true
         cost_power: 1
-        cost_weight: 5.0
-        threshold_to_consider: 20.0
+        cost_weight: 15.0  # 5.0
+        threshold_to_consider: 8.0
       CostCritic: # コストマップのコストが高い位置を避けるように誘導する。コストマップのコストが高い位置を通る軌道の評価を下げる。
         enabled: false
         cost_power: 1
@@ -215,31 +197,31 @@ controller_server:
       PathAlignCritic: # 経路に沿うように誘導する。軌道の点が経路から遠いほど、コストが上がる。軌道の点が経路から近いほど、コストが下がる。
         enabled: true
         cost_power: 1
-        cost_weight: 5.0
+        cost_weight: 20.0  # 20.0
         max_path_occupancy_ratio: 0.05
         trajectory_point_step: 4
-        threshold_to_consider: 0.5
+        threshold_to_consider: 6.0
         offset_from_furthest: 8       # 候補となる軌道が、アライメント批評器を適用するために必要な経路追跡の過程において、十分に進行しているかどうかを確認します。これにより、実際に経路を追跡している場合にのみ経路アライメントが考慮されるようになり
         use_path_orientations: true    # 経路の整列処理において、経路の向きを考慮するかどうか。これは、実行可能なSMACプランナーと組み合わせることで、SMACプランナーが要求した場所・タイミングでのみ方向転換を行うよう促すのに有用
       PathFollowCritic:    # 経路に沿って移動するように誘導する。軌道の点が経路から遠いほど、コストが上がる。
         enabled: true
         cost_power: 1
-        cost_weight: 5.0 # 20
+        cost_weight: 15.0 # 5 # 20
         offset_from_furthest: 10 # 10
-        threshold_to_consider: 0.5
+        threshold_to_consider: 6.0
       PathAngleCritic: # このクリティカル点は、経路に対して相対的な角度が大きい軌道をペナルティの対象とします
         enabled: true
         cost_power: 1
-        cost_weight: 4.0
+        cost_weight: 5.0  # 5.0
         offset_from_furthest: 4
-        threshold_to_consider: 0.5 # ロボットと目標地点との距離（m）。この距離に達すると、経路の角度を考慮しなくなり、目標地点の判定ロジックが優先される。
+        threshold_to_consider: 6.0 # ロボットと目標地点との距離（m）。この距離に達すると、経路の角度を考慮しなくなり、目標地点の判定ロジックが優先される。
         max_angle_to_furthest: 1.0
         mode: 2
-      VelocityDeadbandCritic:
-        enabled: true
-        cost_power: 1
-        cost_weight: 35.0
-        deadband_velocities: [0.2, 0.01, 0.05]
+      # VelocityDeadbandCritic:
+      #   enabled: false
+      #   cost_power: 1
+      #   cost_weight: 35.0
+      #   deadband_velocities: [0.0, 0.00, 0.06]
 
 local_costmap:
   local_costmap:
@@ -249,8 +231,8 @@ local_costmap:
       always_send_full_costmap: True
       footprint_padding: 0.5
       global_frame: mst110cr_2/odom
-      height: 20
-      width: 20
+      height: 60
+      width: 60
       observation_sources: scan
       publish_frequency: 10.0
       resolution: 0.05
@@ -259,7 +241,7 @@ local_costmap:
       transform_tolerance: 0.5
       update_frequency: 10.0
       plugins: ["static_layer", "inflation_layer"]
-      
+
       # Obstacle Layer parameters
       # obstacle_layer:
       #   plugin: "nav2_costmap_2d::ObstacleLayer"
@@ -276,7 +258,7 @@ local_costmap:
       #     obstacle_max_range: 2.5
       #     obstacle_min_range: 0.0
       #   sensor_frame: front_laser
-      
+
       #Static Layer parameters
       static_layer:
         plugin: "nav2_costmap_2d::StaticLayer"
@@ -304,7 +286,7 @@ local_costmap:
           raytrace_min_range: 0.0
           obstacle_max_range: 2.5
           obstacle_min_range: 0.0
-      
+
       # Infration Layer parameters
       inflation_layer:
         plugin: "nav2_costmap_2d::InflationLayer"
@@ -331,7 +313,7 @@ global_costmap:
       transform_tolerance: 0.5
       update_frequency: 10.0
       plugins: ["static_layer", "obstacle_layer", "inflation_layer"]
-      
+
       # Obstacle Layer parameters
       obstacle_layer:
         plugin: "nav2_costmap_2d::ObstacleLayer"
@@ -358,7 +340,7 @@ global_costmap:
         origin_z: 0.0
         z_resolution: 1
         z_voxels: 2
-      
+
       # Infration Layer parameters
       inflation_layer:
         plugin: "nav2_costmap_2d::InflationLayer"
@@ -379,14 +361,14 @@ map_saver:
     free_thresh_default: 0.25
     occupied_thresh_default: 0.65
     map_subscribe_transient_local: True
-    
+
 
 planner_server:
   ros__parameters:
     expected_planner_frequency: 5.0
     planner_plugins: ["GridBased"]
     GridBased:
-      plugin: "nav2_theta_star_planner/ThetaStarPlanner"
+      plugin: "nav2_theta_star_planner::ThetaStarPlanner"
       w_euc_cost: 1.0
       w_traversal_cost: 0.05
       # w_traversal_cost: 4.0
@@ -411,15 +393,15 @@ behavior_server:
     cycle_frequency: 10.0
     behavior_plugins: ["spin", "backup", "drive_on_heading", "assisted_teleop", "wait"]
     spin:
-      plugin: "nav2_behaviors/Spin"
+      plugin: "nav2_behaviors::Spin"
     backup:
-      plugin: "nav2_behaviors/BackUp"
+      plugin: "nav2_behaviors::BackUp"
     drive_on_heading:
-      plugin: "nav2_behaviors/DriveOnHeading"
+      plugin: "nav2_behaviors::DriveOnHeading"
     wait:
-      plugin: "nav2_behaviors/Wait"
+      plugin: "nav2_behaviors::Wait"
     assisted_teleop:
-      plugin: "nav2_behaviors/AssistedTeleop"
+      plugin: "nav2_behaviors::AssistedTeleop"
     local_frame: mst110cr_2/odom
     global_frame: map
     robot_base_frame: mst110cr_2/base_link
@@ -445,10 +427,10 @@ velocity_smoother:
     smoothing_frequency: 20.0
     scale_velocities: False
     feedback: "OPEN_LOOP"
-    max_velocity: [0.5, 0.0, 0.08]
-    min_velocity: [-0.5, 0.0, -0.08]
-    max_accel: [0.35, 0.0, 0.5]
-    max_decel: [-1.0, 0.0, -1.0]
+    max_velocity: [1.5, 0.0, 0.15]
+    min_velocity: [-1.5, 0.0, -0.15]
+    max_accel: [0.8, 0.0, 0.2]
+    max_decel: [-1.0, 0.0, -0.3]
     odom_topic: "odom"
     odom_duration: 0.1
     deadband_velocity: [0.0, 0.0, 0.0]

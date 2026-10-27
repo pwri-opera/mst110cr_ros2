@@ -1,4 +1,4 @@
-"""Remote route-switcher navigation and RViz; vehicle provides localization/TF."""
+"""Remote standard navigation and RViz; vehicle provides localization/TF."""
 import os
 from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
@@ -20,22 +20,20 @@ def generate_launch_description():
         'autostart': 'true',
         'use_rviz': 'true',
         'map': os.path.join(nav, 'map', 'map.yaml'),
-        'graph': os.path.join(nav, 'graphs', 'pwri_dxfield_261019_tuning.geojson'),
-        'params_file': os.path.join(nav, 'params', 'mst110cr_enable_route_switcher_navigation.yaml'),
+        'params_file': os.path.join(nav, 'params', 'navigation_parameters.yaml'),
         'rviz_config': "/home/opera/mst110cr_ws/src/mst110cr_ros2/mst110cr_navigation/rviz2/mst110cr_navigation.rviz",
     }
     return LaunchDescription([
         *[DeclareLaunchArgument(name, default_value=value) for name, value in arguments.items()],
         IncludeLaunchDescription(
             PythonLaunchDescriptionSource(os.path.join(
-                nav, 'launch', 'mst110cr_enable_route_switcher_navigation.launch.py')),
+                nav, 'launch', 'mst110cr_navigation.launch.py')),
             launch_arguments={
                 'robot_name': robot,
-                'namespace': robot,
+                'use_namespace': 'true',
                 'use_sim_time': sim,
                 'autostart': LaunchConfiguration('autostart'),
                 'map': LaunchConfiguration('map'),
-                'graph': LaunchConfiguration('graph'),
                 'params_file': LaunchConfiguration('params_file'),
             }.items(),
         ),
