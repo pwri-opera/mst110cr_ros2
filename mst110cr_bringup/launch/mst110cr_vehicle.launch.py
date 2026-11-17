@@ -49,7 +49,8 @@ def generate_launch_description():
         IncludeLaunchDescription(
                 PythonLaunchDescriptionSource(gnss_localizer_ros2_launch_file_path),
                 launch_arguments={'use_sim_time': use_sim_time,
-                                  'yaw_offset': LaunchConfiguration('yaw_offset')}.items(),
+                                  'yaw_offset': LaunchConfiguration('yaw_offset'),
+                                  'plane': '6'}.items(),
         ),
 
         IncludeLaunchDescription(
@@ -79,14 +80,38 @@ def generate_launch_description():
 
             DeclareLaunchArgument('robot_name', default_value=robot_name),
 
+            # 土研（９系）
+            # Node(
+            #     package='tf2_ros',
+            #     executable='static_transform_publisher',
+            #     name='world_to_map',
+            #     arguments=[
+            #         '--x','21395.178', 
+            #         '--y','14034.450', 
+            #         '--z','28.552', 
+            #         '--roll','0', 
+            #         '--pitch','0', 
+            #         '--yaw','0', 
+            #         '--frame-id', 'world',
+            #         '--child-frame-id', 'map'
+            #     ],
+            #     parameters=[
+            #         params,
+            #         {
+            #             'use_sim_time': use_sim_time
+            #         }
+            #     ]
+            # ),
+            
+            # 京都(6系)
             Node(
                 package='tf2_ros',
                 executable='static_transform_publisher',
                 name='world_to_map',
                 arguments=[
-                    '--x','21395.178', 
-                    '--y','14034.450', 
-                    '--z','28.552', 
+                    '--x','-19317.145', 
+                    '--y','-138648.38', 
+                    '--z','52.157', 
                     '--roll','0', 
                     '--pitch','0', 
                     '--yaw','0', 
@@ -100,7 +125,7 @@ def generate_launch_description():
                     }
                 ]
             ),
-            
+
             Node(
                 package='robot_state_publisher',
                 executable='robot_state_publisher',
