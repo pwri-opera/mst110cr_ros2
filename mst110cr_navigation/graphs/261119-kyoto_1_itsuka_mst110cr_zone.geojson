@@ -48,7 +48,7 @@
     {
       "type": "Feature",
       "properties": {
-        "id": 3515069906,
+        "id": 3074481374,
         "metadata": {
           "radius": 1.5,
           "route_rank": 0
@@ -56,7 +56,49 @@
       },
       "geometry": {
         "type": "Point",
-        "coordinates": [-19.0443, -16.5074]
+        "coordinates": [-19.7785, -6.84341]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1298676412,
+        "metadata": {
+          "radius": 1.5,
+          "route_rank": 0
+        }
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-19.04, -16.5]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 2613205582,
+        "metadata": {
+          "radius": 1.5,
+          "route_rank": 0
+        }
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-16.1202, -26.0715]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 3716057741,
+        "metadata": {
+          "radius": 1.5,
+          "route_rank": 0
+        }
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-10.0371, -31.8706]
       }
     },
     {
@@ -76,20 +118,6 @@
     {
       "type": "Feature",
       "properties": {
-        "id": 1062394563,
-        "metadata": {
-          "radius": 1.5,
-          "route_rank": 0
-        }
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [-13.8938, -31.9608]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
         "id": 3617296061,
         "metadata": {
           "radius": 1.5,
@@ -104,31 +132,162 @@
     {
       "type": "Feature",
       "properties": {
-        "id": 1671062601,
-        "startid": 3649198998,
-        "endid": 3515069906,
-        "metadata": { "grade": -13.999 }
+        "id": 3047982956,
+        "startid": 4253398450,
+        "endid": 3716057741,
+        "metadata": {
+          "grade": -15.3683,
+          "speed_limit": 50.0
+        }
       },
       "geometry": {
         "type": "LineString",
         "coordinates": [
-          [-18.0814, 3.77416],
-          [-19.0443, -16.5074]
+          [15.5216, -33.7729],
+          [-10.0371, -31.8706]
         ]
       }
     },
     {
       "type": "Feature",
       "properties": {
-        "id": 4253398452,
-        "startid": 3515069906,
-        "endid": 3649198998,
-        "metadata": { "grade": 13.999 }
+        "id": 4253398490,
+        "startid": 3716057741,
+        "endid": 4253398450,
+        "metadata": {
+          "grade": 15.3683
+        }
       },
       "geometry": {
         "type": "LineString",
         "coordinates": [
-          [-19.0443, -16.5074],
+          [-10.0371, -31.8706],
+          [15.5216, -33.7729]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 2334677248,
+        "startid": 2613205582,
+        "endid": 3716057741,
+        "metadata": {
+          "grade": -13.0849
+        }
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [-16.1202, -26.0715],
+          [-10.0371, -31.8706]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 4253398491,
+        "startid": 3716057741,
+        "endid": 2613205582,
+        "metadata": {
+          "grade": 13.0849
+        }
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [-10.0371, -31.8706],
+          [-16.1202, -26.0715]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 3389260029,
+        "startid": 2613205582,
+        "endid": 1298676412,
+        "metadata": {
+          "grade": 16.7607
+        }
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [-16.1202, -26.0715],
+          [-19.04, -16.5]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 4253398492,
+        "startid": 1298676412,
+        "endid": 2613205582,
+        "metadata": {
+          "grade": -16.7607
+        }
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [-19.04, -16.5],
+          [-16.1202, -26.0715]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 3947096936,
+        "startid": 1298676412,
+        "endid": 3074481374,
+        "metadata": {
+          "grade": 15.0163
+        }
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [-19.04, -16.5],
+          [-19.7785, -6.84341]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 4253398493,
+        "startid": 3074481374,
+        "endid": 1298676412,
+        "metadata": {
+          "grade": -15.0163
+        }
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [-19.7785, -6.84341],
+          [-19.04, -16.5]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 495575805,
+        "startid": 3074481374,
+        "endid": 3649198998,
+        "metadata": {
+          "grade": 17.6858
+        }
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [-19.7785, -6.84341],
           [-18.0814, 3.77416]
         ]
       }
@@ -136,32 +295,18 @@
     {
       "type": "Feature",
       "properties": {
-        "id": 3469399241,
-        "startid": 1062394563,
-        "endid": 3515069906,
-        "metadata": { "grade": 10.1457 }
+        "id": 4253398494,
+        "startid": 3649198998,
+        "endid": 3074481374,
+        "metadata": {
+          "grade": -17.6858
+        }
       },
       "geometry": {
         "type": "LineString",
         "coordinates": [
-          [-13.8938, -31.9608],
-          [-19.0443, -16.5074]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": 4253398480,
-        "startid": 3515069906,
-        "endid": 1062394563,
-        "metadata": { "grade": -10.1457 }
-      },
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [-19.0443, -16.5074],
-          [-13.8938, -31.9608]
+          [-18.0814, 3.77416],
+          [-19.7785, -6.84341]
         ]
       }
     },
@@ -226,38 +371,6 @@
         "coordinates": [
           [-13.0109, 24.9695],
           [-7.76047, 27.2121]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": 3844214893,
-        "startid": 4253398450,
-        "endid": 1062394563,
-        "metadata": { "grade": -22.9644, "speed_limit": 50.0 }
-      },
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [15.5216, -33.7729],
-          [-13.8938, -31.9608]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": 4253398484,
-        "startid": 1062394563,
-        "endid": 4253398450,
-        "metadata": { "grade": 22.9644 }
-      },
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [-13.8938, -31.9608],
-          [15.5216, -33.7729]
         ]
       }
     },
