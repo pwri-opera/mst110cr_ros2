@@ -84,7 +84,7 @@
       },
       "geometry": {
         "type": "Point",
-        "coordinates": [-16.1202, -26.0715]
+        "coordinates": [-16.1202, -27.0715]
       }
     },
     {
@@ -137,7 +137,7 @@
         "endid": 3716057741,
         "metadata": {
           "grade": -15.3683,
-          "speed_limit": 50.0
+          "speed_limit": 70.0
         }
       },
       "geometry": {
@@ -155,7 +155,8 @@
         "startid": 3716057741,
         "endid": 4253398450,
         "metadata": {
-          "grade": 15.3683
+          "grade": 15.3683,
+          "speed_limit": 70.0
         }
       },
       "geometry": {
@@ -173,13 +174,14 @@
         "startid": 2613205582,
         "endid": 3716057741,
         "metadata": {
-          "grade": -13.0849
+          "grade": -13.0849,
+          "speed_limit": 70.0
         }
       },
       "geometry": {
         "type": "LineString",
         "coordinates": [
-          [-16.1202, -26.0715],
+          [-16.1202, -27.0715],
           [-10.0371, -31.8706]
         ]
       }
@@ -191,14 +193,15 @@
         "startid": 3716057741,
         "endid": 2613205582,
         "metadata": {
-          "grade": 13.0849
+          "grade": 13.0849,
+          "speed_limit": 70.0
         }
       },
       "geometry": {
         "type": "LineString",
         "coordinates": [
           [-10.0371, -31.8706],
-          [-16.1202, -26.0715]
+          [-16.1202, -27.0715]
         ]
       }
     },
@@ -215,7 +218,7 @@
       "geometry": {
         "type": "LineString",
         "coordinates": [
-          [-16.1202, -26.0715],
+          [-16.1202, -27.0715],
           [-19.04, -16.5]
         ]
       }
@@ -234,7 +237,7 @@
         "type": "LineString",
         "coordinates": [
           [-19.04, -16.5],
-          [-16.1202, -26.0715]
+          [-16.1202, -27.0715]
         ]
       }
     },

@@ -234,7 +234,7 @@ controller_server:
       PathAlignCritic: # 経路に沿うように誘導する。軌道の点が経路から遠いほど、コストが上がる。軌道の点が経路から近いほど、コストが下がる。
         enabled: true
         cost_power: 1
-        cost_weight: 25.0
+        cost_weight: 30.0
         max_path_occupancy_ratio: 0.05
         trajectory_point_step: 4
         threshold_to_consider: 6.0
@@ -252,7 +252,7 @@ controller_server:
         cost_weight: 5.0  # 5.0
         offset_from_furthest: 4
         threshold_to_consider: 6.0 # ロボットと目標地点との距離（m）。この距離に達すると、経路の角度を考慮しなくなり、目標地点の判定ロジックが優先される。
-        max_angle_to_furthest: 1.0
+        max_angle_to_furthest: 0.5
         mode: 2
       # VelocityDeadbandCritic:
       #   enabled: false
