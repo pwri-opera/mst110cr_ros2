@@ -88,7 +88,7 @@ def generate_launch_description():
                         'odom0_config': [
                             False,  False,  False,
                             False, False, False,
-                            True, False, False,
+                            True, True, False,
                             False, False, False,
                             False, False, False],
                         'odom0_differential': False,

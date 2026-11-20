@@ -135,7 +135,7 @@ def generate_launch_description():
 
     declare_graph_file_cmd = DeclareLaunchArgument(
         'graph',
-        default_value=os.path.join(mst110cr_navigation_dir, 'graphs', 'pwri_dxfield_northeast.geojson'), description='Path to the graph file to load'
+        default_value=os.path.join(mst110cr_navigation_dir, 'graphs', '261119-kyoto_1_itsuka_mst110cr_zone.geojson'), description='Path to the graph file to load'
     )
 
     declare_autostart_cmd = DeclareLaunchArgument(

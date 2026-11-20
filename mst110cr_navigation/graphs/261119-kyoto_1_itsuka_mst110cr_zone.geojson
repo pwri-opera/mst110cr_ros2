@@ -1,0 +1,349 @@
+{
+  "type": "FeatureCollection",
+  "name": "261119-kyoto_1",
+  "crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:EPSG::6677" } },
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 3266616525,
+        "metadata": {
+          "radius": 1.5,
+          "route_rank": 0
+        }
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [3.83737, 25.7923]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1434417707,
+        "metadata": {
+          "radius": 1.5,
+          "route_rank": 0
+        }
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-13.0109, 24.9695]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 3649198998,
+        "metadata": {
+          "radius": 1.5,
+          "route_rank": 0
+        }
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-18.0814, 3.77416]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 3515069906,
+        "metadata": {
+          "radius": 1.5,
+          "route_rank": 0
+        }
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-19.0443, -16.5074]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 4253398450,
+        "metadata": {
+          "radius": 1.5,
+          "route_rank": 0
+        }
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [15.5216, -33.7729]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1062394563,
+        "metadata": {
+          "radius": 1.5,
+          "route_rank": 0
+        }
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-13.8938, -31.9608]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 3617296061,
+        "metadata": {
+          "radius": 1.5,
+          "route_rank": 0
+        }
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-7.76047, 27.2121]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1671062601,
+        "startid": 3649198998,
+        "endid": 3515069906,
+        "metadata": { "grade": -13.999 }
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [-18.0814, 3.77416],
+          [-19.0443, -16.5074]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 4253398452,
+        "startid": 3515069906,
+        "endid": 3649198998,
+        "metadata": { "grade": 13.999 }
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [-19.0443, -16.5074],
+          [-18.0814, 3.77416]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 3469399241,
+        "startid": 1062394563,
+        "endid": 3515069906,
+        "metadata": { "grade": 10.1457 }
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [-13.8938, -31.9608],
+          [-19.0443, -16.5074]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 4253398480,
+        "startid": 3515069906,
+        "endid": 1062394563,
+        "metadata": { "grade": -10.1457 }
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [-19.0443, -16.5074],
+          [-13.8938, -31.9608]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 2906426610,
+        "startid": 3617296061,
+        "endid": 3266616525,
+        "metadata": { "grade": 20.3725 }
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [-7.76047, 27.2121],
+          [3.83737, 25.7923]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 4253398482,
+        "startid": 3266616525,
+        "endid": 3617296061,
+        "metadata": { "grade": -20.3725, "speed_limit": 50.0 }
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [3.83737, 25.7923],
+          [-7.76047, 27.2121]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1434381048,
+        "startid": 3617296061,
+        "endid": 1434417707,
+        "metadata": { "grade": -26.3818, "speed_limit": 50.0 }
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [-7.76047, 27.2121],
+          [-13.0109, 24.9695]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 4253398483,
+        "startid": 1434417707,
+        "endid": 3617296061,
+        "metadata": { "grade": 26.3818 }
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [-13.0109, 24.9695],
+          [-7.76047, 27.2121]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 3844214893,
+        "startid": 4253398450,
+        "endid": 1062394563,
+        "metadata": { "grade": -22.9644, "speed_limit": 50.0 }
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [15.5216, -33.7729],
+          [-13.8938, -31.9608]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 4253398484,
+        "startid": 1062394563,
+        "endid": 4253398450,
+        "metadata": { "grade": 22.9644 }
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [-13.8938, -31.9608],
+          [15.5216, -33.7729]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 4015882616,
+        "startid": 1434417707,
+        "endid": 3649198998,
+        "metadata": { "grade": -17.2351, "speed_limit": 50.0 }
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [-13.0109, 24.9695],
+          [-18.0814, 3.77416]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 4253398485,
+        "startid": 3649198998,
+        "endid": 1434417707,
+        "metadata": { "grade": 17.2351 }
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [-18.0814, 3.77416],
+          [-13.0109, 24.9695]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 3480789081,
+        "name": "loading_zone",
+        "entry_node_ids": [3266616525],
+        "exit_node_ids": [3266616525],
+        "metadata": {
+          "tags": ["free_driving_zone"]
+        }
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [21.4012, 30.4659],
+            [4.87668, 28.422],
+            [-0.793182, 23.3287],
+            [1.15044, -0.758942],
+            [16.2147, -19.1496],
+            [45.8893, 3.10501],
+            [21.4012, 30.4659]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 677251107,
+        "name": "dump_zone",
+        "entry_node_ids": [4253398450],
+        "exit_node_ids": [4253398450],
+        "metadata": {
+          "tags": ["free_driving_zone"]
+        }
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [54.9914, -5.40027],
+            [11.2809, -34.5223],
+            [19.1686, -50.5119],
+            [49.2559, -46.2627],
+            [76.4768, -36.2987],
+            [74.4939, -26.7321],
+            [54.9914, -5.40027]
+          ]
+        ]
+      }
+    }
+  ]
+}

@@ -131,18 +131,18 @@ controller_server:
       yaw_goal_tolerance: 0.15  # rad
 
     FollowPath:
-      # BT selects FollowPath; the shim aligns a newly received path before MPPI tracks it.
+      # BT selects FollowPath; the shim aligns only the goal heading, while MPPI tracks the path.
       # Same flat primary_controller layout as navigation_parameters_sim.yaml.
       plugin: "nav2_rotation_shim_controller::RotationShimController"
       primary_controller: "nav2_mppi_controller::MPPIController"
-      angular_dist_threshold: 0.785398       # Start alignment above 45 deg.
+      angular_dist_threshold: 3.2            # Above pi: disable initial/new-path heading alignment.
       angular_disengage_threshold: 0.392699  # Hand off below 22.5 deg (supported versions).
       forward_sampling_distance: 1.0
       rotate_to_heading_angular_vel: 0.1   # Match MPPI and velocity_smoother limits.
       max_angular_accel: 0.2                # Match velocity_smoother angular acceleration.
       simulate_ahead_time: 1.0
       rotate_to_goal_heading: true
-      rotate_to_heading_once: false        # Allow alignment when a new path is received.
+      rotate_to_heading_once: false        # Initial/new-path alignment is disabled by the threshold above.
       use_path_orientations: false          # Face the sampled path position.
       # Ramp from the preceding command: near-zero odom must not trap the ramp in deadband.
       # Heading alignment still uses the measured robot pose.
@@ -153,19 +153,19 @@ controller_server:
       model_dt: 0.05            # 各時間ステップのdt（時間間隔）の長さ（秒単位）
       batch_size: 1000         # 特定の反復において、現在の最適制御シーケンスからランダムにサンプリングされた候補軌道の数。50 Hzでは1000、30 Hzでは2000が良好な結果をもたらす模様。
       ax_max: 12.0  # 3.0 # 6.0
-      ax_min: -18.0  # -6.0
+      ax_min: -12.0  # -6.0
       ay_max: 3.0
       ay_min: -3.0
       az_max: 0.5  # 3.5 # 6.0
       vx_std: 0.3 # 0.5  # 1.5  # 0.5  
       vy_std: 0.1
       wz_std: 0.08 # 2.0 # 0.2 # 0.08
-      vx_max: 2.0
+      vx_max: 1.5
       vx_min: -1.5 # -0.6
       vy_max: 0.5
       wz_max: 0.15 # 1.9
       iteration_count: 1        # MPPIアルゴリズムの反復回数。1のままにしておくことを推奨
-      prune_distance: 25.0    # 10秒の予測 × 前進上限2.0 m/sに余裕を確保
+      prune_distance: 25.0    # 10秒の予測 × 前進上限1.5 m/sに余裕を確保
       transform_tolerance: 0.25
       temperature: 0.3          # MPPIアルゴリズムの温度パラメータ。値が小さいほど、最適な軌道に対する重みの差が大きくなる。
       gamma: 0.015             # MPPIアルゴリズムの割引率。将来のコストが現在のコストに与える影響を制御する。値が小さいほど、アルゴリズムはより短期的なコストに焦点を当てる。
@@ -199,7 +199,7 @@ controller_server:
           "PathAlignCritic",
           "PathFollowCritic",
           "PathAngleCritic",
-          "PreferForwardCritic",
+          # "PreferForwardCritic",
           # "VelocityDeadbandCritic"
         ]
       ConstraintCritic:  # 動的または運動学的制約の範囲外にある成分を含む軌道の評価を下げる   
@@ -209,18 +209,18 @@ controller_server:
       GoalCritic:        # 目標に適切な距離まで近づいた際に、目標に向かって移動するよう促す
         enabled: true
         cost_power: 1
-        cost_weight: 25.0
+        cost_weight: 15.0
         threshold_to_consider: 7.0
       GoalAngleCritic:        # 目標位置に近い位置にいる際に、目標のポーズの角度に到達するよう誘導する
         enabled: true
         cost_power: 1
         cost_weight: 3.0
         threshold_to_consider: 0.8
-      PreferForwardCritic: # 前進を好むように誘導する。
-        enabled: true
-        cost_power: 1
-        cost_weight: 15.0  # 5.0
-        threshold_to_consider: 8.0
+      # PreferForwardCritic: # 前進を好むように誘導する。
+      #   enabled: false
+      #   cost_power: 1
+      #   cost_weight: 15.0  # 5.0
+      #   threshold_to_consider: 8.0
       CostCritic: # コストマップのコストが高い位置を避けるように誘導する。コストマップのコストが高い位置を通る軌道の評価を下げる。
         enabled: false
         cost_power: 1
@@ -234,7 +234,7 @@ controller_server:
       PathAlignCritic: # 経路に沿うように誘導する。軌道の点が経路から遠いほど、コストが上がる。軌道の点が経路から近いほど、コストが下がる。
         enabled: true
         cost_power: 1
-        cost_weight: 20.0  # 20.0
+        cost_weight: 25.0
         max_path_occupancy_ratio: 0.05
         trajectory_point_step: 4
         threshold_to_consider: 6.0
@@ -265,7 +265,7 @@ velocity_smoother:
     smoothing_frequency: 20.0
     scale_velocities: False
     feedback: "OPEN_LOOP"
-    max_velocity: [2.0, 0.0, 0.15]
+    max_velocity: [1.5, 0.0, 0.15]
     min_velocity: [-1.5, 0.0, -0.15]
     max_accel: [0.8, 0.0, 0.2]
     max_decel: [-1.0, 0.0, -0.3]
@@ -455,9 +455,9 @@ smoother_server:
       plugin: "nav2_smoother::SimpleSmoother"
       tolerance: 1.0e-10
       max_its: 1000
-      refinement_num: 150  # 5
-      w_data: 0.02  # 0.2
-      w_smooth: 0.6  # 0.3
+      refinement_num: 2
+      w_data: 0.2
+      w_smooth: 0.3
       # False for Route Server or others where smoothing out sharp corners is OK
       enforce_path_inversion: False
       do_refinement: True
@@ -517,14 +517,14 @@ route_server:
     boundary_radius_to_achieve_node: 15.0  # 1.0
     radius_to_achieve_node: 15.0
     smooth_corners: true
-    operations: ["AdjustSpeedLimit", "ReroutingService", "CollisionMonitor", "OperaRouteVisualizer"]
+    operations: ["AdjustSpeedLimit", "ReroutingService", "OperaRouteVisualizer"]
     ReroutingService:
       plugin: "nav2_route::ReroutingService"
     AdjustSpeedLimit:
       plugin: "nav2_route::AdjustSpeedLimit"
-    CollisionMonitor:
-      plugin: "nav2_route::CollisionMonitor"
-      max_collision_dist: 3.0
+    # CollisionMonitor:
+    #   plugin: "nav2_route::CollisionMonitor"
+    #   max_collision_dist: 3.0
     OperaRouteVisualizer:
       plugin: "opera_nav2_route_plugins::OperaRouteVisualizer"
     edge_cost_functions: ["DistanceScorer", "CostmapScorer"]

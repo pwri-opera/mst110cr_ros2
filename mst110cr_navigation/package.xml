@@ -4,7 +4,9 @@
   <name>mst110cr_navigation</name>
   <version>0.0.0</version>
   <description>TODO: Package description</description>
-  <maintainer email="kasahara.yuichiro.res@gmail.com">kasahara</maintainer>
+  <maintainer email="50649356+itsuka-to@users.noreply.github.com">itsuka-to</maintainer>
+  <author email="50649356+itsuka-to@users.noreply.github.com">itsuka-to</author>
+  <author email="kasahara.yuichiro.res@gmail.com">kasahara</author>
   <license>TODO: License declaration</license>
 
   <exec_depend>rclpy</exec_depend>
