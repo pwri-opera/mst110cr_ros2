@@ -4,6 +4,12 @@ Author: itsuka-to
 
 MST110CR Route Serverを実装しているバージョンです。
 
+## 必要なパッケージ
+
+* https://github.com/pwri-opera/opera_behavior_tree
+* https://github.com/pwri-opera/opera_nav2_route_plugins
+* https://github.com/pwri-opera/opera_bt_msgs
+
 ## Usage
 
 ```bash
