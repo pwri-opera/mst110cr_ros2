@@ -1,0 +1,13 @@
+/**/travel_direction_adapter:
+  ros__parameters:
+    enable_correction: false
+    input_topic: cmd_vel_smoothed
+    output_topic: cmd_vel
+    joint_states_topic: joint_states
+    joint_name: rotate_joint
+    joint_state_timeout: 0.5
+    # Provisional: verify the machine's actual switching angle before enabling.
+    reverse_threshold_deg: 90.0
+    # Stop at threshold +/- this angle. Not a hysteresis band.
+    stop_band_deg: 0.0
+    invert_angular_z: false
