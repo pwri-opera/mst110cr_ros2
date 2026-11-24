@@ -2,7 +2,8 @@
 
 ## remote側
 
-`mst110cr_remote.launch.py`は、`mst110cr_navigation.launch.py`とRVizを起動します。
+`mst110cr_remote.launch.py`は、現在 `mst110cr_enable_route_switcher_navigation.launch.py`
+を起動します。RVizは `use_rviz:=true` で起動します。
 既定のロボット名・名前空間は`mst110cr_2`です。位置推定と機体TFはvehicle側が配信します。
 
 ```bash
@@ -13,10 +14,17 @@ ros2 launch mst110cr_bringup mst110cr_remote.launch.py use_sim_time:=true
 
 bag再生ではvehicle側と同じ`ROS_DOMAIN_ID`を設定し、両方を`use_sim_time:=true`で起動します。
 実機では`use_sim_time:=false`（既定値）。GUIなしは`use_rviz:=false`、自動Active化を止める場合は`autostart:=false`。
-`map:=...`、`params_file:=...`で地図・Nav2設定を変更できます。
-既定は`navigation_parameters.yaml`で、sim timeでも同じMPPI設定を使用します。
-RotationShim + MPPI（CrawlerDump）、Critic設定、速度スムーザーは切替前のroute-switcher設定に合わせています。
-通常のNav2 BTで`FollowPath`を使用し、ルートグラフ・route serverは使いません。
+`map:=...`で地図を変更できます。現在のroute switcher用includeは
+`mst110cr_enable_route_switcher_navigation.yaml`を明示しているため、
+親launchの`params_file`は使用しません。ルートグラフ・route serverを使用します。
+
+子launchで`mst110cr_travel_direction`の`travel_direction_adapter`も起動します。
+velocity_smootherの出力を中継し、設定に応じて上部旋回角による前後補正を行います。
+このroute switcher構成では補正を既定で有効にします。
+`enable_travel_direction_correction:=false`で補正を無効にしてそのまま転送できます。
+この起動引数は補正設定ファイルの`enable_correction`より優先されます。
+補正設定は`travel_direction_params_file:=/path/to/config.yaml`で指定できます。
+コメントアウトされている通常ナビゲーション用includeは、この中継の対象外です。
 
 | 用途 | トピック・フレーム |
 |---|---|
@@ -26,7 +34,7 @@ RotationShim + MPPI（CrawlerDump）、Critic設定、速度スムーザーは�
 | local costmap | `mst110cr_2/odom` |
 | 車体フレーム | `mst110cr_2/base_link` |
 | Nav2の速度参照 | `/mst110cr_2/odom_pose` |
-| 速度指令 | `/mst110cr_2/cmd_vel_nav → velocity_smoother → /mst110cr_2/cmd_vel`（Twist） |
+| 速度指令 | `cmd_vel_nav → velocity_smoother → cmd_vel_smoothed → travel_direction_adapter → cmd_vel`（Twist、すべて`/mst110cr_2/`配下） |
 | 障害物入力 | `/mst110cr_2/scan`（LaserScan、別途配信が必要） |
 
 今回のlocalization2 bagにはscanがないため、位置推定・TF・Nav2起動は確認できますが、障害物入力を含む走行検証には別途scanが必要です。

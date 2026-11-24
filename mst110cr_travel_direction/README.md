@@ -11,11 +11,26 @@ joint_states → travel_direction_adapter → cmd_vel → COM3ドライバ
 
 ## 現在の導入範囲
 
-単体起動用launchと設定を提供します。既存Nav2のlaunch、smootherのリマップ、
-COM3ドライバは変更していません。稼働中の機体への組み込み・起動も行いません。
-既存launchの `('cmd_vel_smoothed', 'cmd_vel')` を削除し、本ノードを起動すると
-上記の経路になります。これらの接続変更はセットで実施してください。
-既存構成のまま本ノードを起動しても、smootherの出力は本ノードを通りません。
+`mst110cr_remote.launch.py` が現在使用している
+`mst110cr_enable_route_switcher_navigation.launch.py` に組み込んでいます。
+この子launchが本ノードを同じ名前空間・`use_sim_time` で起動し、
+smootherの出力を `cmd_vel_smoothed` のまま本ノードへ渡します。
+COM3ドライバの入力は従来どおり `cmd_vel` です。
+このroute switcher用launchでは補正を既定で有効にします。
+`enable_travel_direction_correction:=false` を指定すると、そのまま転送します。
+この起動引数は設定ファイルの `enable_correction` より優先されます。
+単体起動では設定ファイルに従い、既定は補正無効です。
+
+補正ノード用の設定は `travel_direction_params_file:=/path/to/config.yaml` で指定できます。
+Nav2用の `params_file` とは別です。remote起動時に単体launchを重ねて起動しないでください。
+通常の `mst110cr_navigation.launch.py` と `mst110cr_route_navigation.launch.py` は
+今回の接続変更の対象外です。remoteの起動先を切り替える場合は接続構成も確認してください。
+
+```bash
+colcon build --packages-select mst110cr_travel_direction mst110cr_navigation mst110cr_bringup --symlink-install
+source install/setup.bash
+ros2 launch mst110cr_bringup mst110cr_remote.launch.py
+```
 
 ## ビルドと単体起動
 

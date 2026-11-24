@@ -3,7 +3,8 @@ import os
 from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
 from launch_ros.actions import Node, PushRosNamespace
-from launch.actions import DeclareLaunchArgument, GroupAction, SetEnvironmentVariable, OpaqueFunction
+from launch.actions import DeclareLaunchArgument, GroupAction, SetEnvironmentVariable, OpaqueFunction, IncludeLaunchDescription
+from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.conditions import IfCondition
 from launch.substitutions import LaunchConfiguration, PythonExpression
 from launch_ros.actions import LoadComposableNodes, Node, SetParameter
@@ -17,6 +18,7 @@ use_respawn = True
 
 def generate_launch_description():
     mst110cr_navigation_dir = get_package_share_directory('mst110cr_navigation')
+    travel_direction_dir = get_package_share_directory('mst110cr_travel_direction')
 
     namespace = LaunchConfiguration('namespace')
     use_sim_time = LaunchConfiguration('use_sim_time')
@@ -170,6 +172,38 @@ def generate_launch_description():
         'robot_name', default_value='mst110cr_2'
     )
 
+    declare_travel_direction_params_cmd = DeclareLaunchArgument(
+        'travel_direction_params_file',
+        default_value=os.path.join(
+            travel_direction_dir, 'config', 'mst110cr_travel_direction.yaml'),
+        description='Parameters for the velocity adapter after velocity_smoother',
+    )
+    declare_travel_direction_correction_cmd = DeclareLaunchArgument(
+        'enable_travel_direction_correction', default_value='true',
+        description='Override enable_correction for the travel direction adapter',
+    )
+    travel_direction_params = RewrittenYaml(
+        source_file=LaunchConfiguration('travel_direction_params_file'),
+        param_rewrites={
+            'enable_correction': LaunchConfiguration('enable_travel_direction_correction'),
+        },
+        convert_types=True,
+    )
+
+    # Scope the child launch's params_file so it cannot overwrite Nav2 parameters.
+    # This is a regular ROS node, not a Nav2 lifecycle node or component.
+    load_travel_direction = GroupAction([
+        IncludeLaunchDescription(
+            PythonLaunchDescriptionSource(os.path.join(
+                travel_direction_dir, 'launch', 'mst110cr_travel_direction.launch.py')),
+            launch_arguments={
+                'namespace': namespace,
+                'use_sim_time': use_sim_time,
+                'params_file': travel_direction_params,
+            }.items(),
+        ),
+    ])
+
     load_localization_nodes = GroupAction([
         PushRosNamespace(
             # condition=IfCondition(True),
@@ -280,7 +314,7 @@ def generate_launch_description():
                         parameters=[configured_params, {'use_sim_time': use_sim_time, 'enable_stamped_cmd_vel': False}],
                         remappings=remappings + [
                             ('cmd_vel', 'cmd_vel_nav'),
-                            ('cmd_vel_smoothed', 'cmd_vel'),
+                            # cmd_vel_smoothed feeds travel_direction_adapter.
                         ],
                         namespace=namespace,
                     ),
@@ -325,7 +359,10 @@ def generate_launch_description():
     ld.add_action(declare_container_name_cmd)
     ld.add_action(declare_use_respawn_cmd)
     ld.add_action(declare_log_level_cmd)
+    ld.add_action(declare_travel_direction_params_cmd)
+    ld.add_action(declare_travel_direction_correction_cmd)
     # Add the actions to launch all of the navigation nodes
+    ld.add_action(load_travel_direction)
     ld.add_action(load_localization_nodes)
     ld.add_action(load_navigation_composable_nodes)
 
