@@ -104,7 +104,7 @@
     {
       "type": "Feature",
       "properties": {
-        "id": 4253398450,
+        "id": 3234590919,
         "metadata": {
           "radius": 1.5,
           "route_rank": 0
@@ -112,7 +112,7 @@
       },
       "geometry": {
         "type": "Point",
-        "coordinates": [15.5216, -34.2729]
+        "coordinates": [10.6751, -33.8128]
       }
     },
     {
@@ -133,17 +133,17 @@
       "type": "Feature",
       "properties": {
         "id": 3047982956,
-        "startid": 4253398450,
+        "startid": 3234590919,
         "endid": 3716057741,
         "metadata": {
-          "grade": -15.3683,
+          "grade": -13.3941,
           "speed_limit": 70.0
         }
       },
       "geometry": {
         "type": "LineString",
         "coordinates": [
-          [15.5216, -34.2729],
+          [10.6751, -33.8128],
           [-10.0371, -31.8706]
         ]
       }
@@ -153,9 +153,9 @@
       "properties": {
         "id": 4253398490,
         "startid": 3716057741,
-        "endid": 4253398450,
+        "endid": 3234590919,
         "metadata": {
-          "grade": 15.3683,
+          "grade": 13.3941,
           "speed_limit": 70.0
         }
       },
@@ -163,7 +163,7 @@
         "type": "LineString",
         "coordinates": [
           [-10.0371, -31.8706],
-          [15.5216, -34.2729]
+          [10.6751, -33.8128]
         ]
       }
     },
@@ -440,8 +440,8 @@
       "properties": {
         "id": 677251107,
         "name": "dump_zone",
-        "entry_node_ids": [4253398450],
-        "exit_node_ids": [4253398450],
+        "entry_node_ids": [3234590919],
+        "exit_node_ids": [3234590919],
         "metadata": {
           "tags": ["free_driving_zone"]
         }
@@ -451,7 +451,7 @@
         "coordinates": [
           [
             [54.9914, -5.40027],
-            [11.2809, -34.5223],
+            [8.48, -32.1],
             [19.1686, -50.5119],
             [49.2559, -46.2627],
             [76.4768, -36.2987],
