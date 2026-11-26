@@ -335,7 +335,7 @@
         "id": 4253398482,
         "startid": 3266616525,
         "endid": 3617296061,
-        "metadata": { "grade": -20.3725, "speed_limit": 50.0 }
+        "metadata": { "grade": -20.3725, "speed_limit": 60.0 }
       },
       "geometry": {
         "type": "LineString",
@@ -351,7 +351,7 @@
         "id": 1434381048,
         "startid": 3617296061,
         "endid": 1434417707,
-        "metadata": { "grade": -26.3818, "speed_limit": 50.0 }
+        "metadata": { "grade": -26.3818, "speed_limit": 60.0 }
       },
       "geometry": {
         "type": "LineString",
@@ -383,7 +383,7 @@
         "id": 4015882616,
         "startid": 1434417707,
         "endid": 3649198998,
-        "metadata": { "grade": -17.2351, "speed_limit": 50.0 }
+        "metadata": { "grade": -17.2351, "speed_limit": 60.0 }
       },
       "geometry": {
         "type": "LineString",

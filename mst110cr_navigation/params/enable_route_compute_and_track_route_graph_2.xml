@@ -12,6 +12,8 @@
 
 <root BTCPP_format="4" main_tree_to_execute="MainTree">
   <BehaviorTree ID="MainTree">
+    <Sequence name="NavigationSession">
+      <Script code="route_direction := 'undecided'"/>
     <RecoveryNode number_of_retries="6" name="NavigateRecovery">
       <PipelineSequence name="NavigateWithReplanning">
         <ControllerSelector selected_controller="{selected_controller}" default_controller="FollowPath" topic_name="controller_selector"/>
@@ -43,6 +45,8 @@
                     <!-- Compute the route -->
                     <!-- <ComputeRoute goal="{goal}" path="{route_path}" route="{route}" use_poses="true" error_code_id="{compute_route_error_code}" error_msg="{compute_route_error_msg}"/> -->
                     <ComputeRoute use_start="true" start="{start_temp}" goal="{goal_temp}" path="{route_path}" route="{route}" use_poses="true" error_code_id="{compute_route_error_code}" error_msg="{compute_route_error_msg}"/>
+                    <!-- Preserve the route body before adding first/last-mile connectors. -->
+                    <Script code="route_body_path_pending := route_path"/>
                     
                     <!-- Find if the route start node is far from the robot's current pose; if so, connect them for 'first mile'. -->
                     <Sequence>
@@ -69,16 +73,20 @@
                     </Sequence>
 
                     <!-- Smooth the completed route -->
-                    <!-- Forward-only route: align before smoothing to avoid reverse inference. -->
+                    <!-- Normalize for smoothing; actual route direction is chosen at entry while driving. -->
                     <AlignPathOrientations input_path="{route_path}" output_path="{route_path}"/>
+                    <Script code="route_unsmoothed_path_pending := route_path"/>
                     <SmoothPath unsmoothed_path="{route_path}" smoothed_path="{path}" smoother_id="route_smoother" error_code_id="{smoother_error_code}" error_msg="{smoother_error_msg}"/>
                     <!-- Restore the requested arrival orientation, including duplicate endpoints. -->
                     <SetPathGoalOrientation input_path="{path}" goal="{goal}" output_path="{path}"/>
+                    <!-- Publish a consistent snapshot only after every async planning action finishes. -->
+                    <Script code="route_body_path := route_body_path_pending; route_unsmoothed_path := route_unsmoothed_path_pending; route_base_path := path; route_plan_goal := goal"/>
                   </Sequence>
 
 
                   <!-- if enable_route == "disable" -->
                   <Sequence>
+                    <Script code="route_direction := 'undecided'"/>
                     <AppendGoalPoseToGoals output_goals="{route_goals}" goal_pose="{goal}"/>
                     <RateController hz="1.0">
                       <RecoveryNode number_of_retries="1" name="ComputePathToPose">
@@ -99,6 +107,8 @@
                   <Sequence name="ComputeAndSmoothRoute">
                     <!-- Compute the route -->
                     <ComputeRoute use_start="true" start="{start_temp}" goal="{goal_temp}" path="{route_path}" route="{route}" use_poses="true" error_code_id="{compute_route_error_code}" error_msg="{compute_route_error_msg}"/>
+                    <!-- Preserve the route body before adding first/last-mile connectors. -->
+                    <Script code="route_body_path_pending := route_path"/>
 
                     <!-- Find if the route start node is far from the robot's current pose; if so, connect them for 'first mile'. -->
                     <Sequence>
@@ -127,11 +137,14 @@
                     </Sequence>
 
                     <!-- Smooth the completed route -->
-                    <!-- Forward-only route: align before smoothing to avoid reverse inference. -->
+                    <!-- Normalize for smoothing; actual route direction is chosen at entry while driving. -->
                     <AlignPathOrientations input_path="{route_path}" output_path="{route_path}"/>
+                    <Script code="route_unsmoothed_path_pending := route_path"/>
                     <SmoothPath unsmoothed_path="{route_path}" smoothed_path="{path}" smoother_id="route_smoother" error_code_id="{smoother_error_code}" error_msg="{smoother_error_msg}"/>
                     <!-- Restore the requested arrival orientation, including duplicate endpoints. -->
                     <SetPathGoalOrientation input_path="{path}" goal="{goal}" output_path="{path}"/>
+                    <!-- Publish a consistent snapshot only after every async planning action finishes. -->
+                    <Script code="route_body_path := route_body_path_pending; route_unsmoothed_path := route_unsmoothed_path_pending; route_base_path := path; route_plan_goal := goal"/>
                   </Sequence>
                 </Switch2>
               </Sequence>
@@ -150,7 +163,16 @@
           <Switch2 variable="{enable_route}" case_1="enable" case_2="disable">
             <!-- Track a graph route only when route navigation is enabled. -->
             <Parallel>
-              <FollowPath path="{path}" controller_id="{selected_controller}" error_code_id="{follow_path_error_code}" error_msg="{follow_path_error_msg}"/>
+              <!-- Retick pose/orientation each BT cycle, including while FollowPath is RUNNING.
+                   Keep the planner's path unchanged; only tracking_path carries the latched yaw. -->
+              <ReactiveSequence name="OrientAtActualRouteEntry">
+                <GetCurrentPose current_pose="{route_tracking_pose}"/>
+                <AlignPathOrientations mode="route_entry" input_path="{route_base_path}" unsmoothed_path="{route_unsmoothed_path}"
+                    route_path="{route_body_path}" current_pose="{route_tracking_pose}" goal="{route_plan_goal}"
+                    entry_tolerance="0.5" tangent_distance="1.0"
+                    direction="{route_direction}" output_path="{tracking_path}"/>
+                <FollowPath path="{tracking_path}" controller_id="{selected_controller}" error_code_id="{follow_path_error_code}" error_msg="{follow_path_error_msg}"/>
+              </ReactiveSequence>
               <ComputeAndTrackRoute use_start="true" start="{start_temp}" goal="{goal_temp}" use_poses="true" error_code_id="{compute_route_error_code}" error_msg="{compute_route_error_msg}"/>
             </Parallel>
             <!-- Same-area navigation only follows the globally planned path. -->
@@ -181,5 +203,6 @@
         </ReactiveFallback>
       </Sequence>
     </RecoveryNode>
+    </Sequence>
   </BehaviorTree>
 </root>

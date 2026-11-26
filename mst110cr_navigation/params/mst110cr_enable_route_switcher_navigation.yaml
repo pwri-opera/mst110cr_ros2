@@ -243,7 +243,7 @@ controller_server:
       PathFollowCritic:    # 経路に沿って移動するように誘導する。軌道の点が経路から遠いほど、コストが上がる。
         enabled: true
         cost_power: 1
-        cost_weight: 15.0 # 5 # 20
+        cost_weight: 10.0
         offset_from_furthest: 10 # 10
         threshold_to_consider: 6.0
       PathAngleCritic: # このクリティカル点は、経路に対して相対的な角度が大きい軌道をペナルティの対象とします
